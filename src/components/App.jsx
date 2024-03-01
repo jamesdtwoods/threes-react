@@ -413,6 +413,14 @@ function App() {
 
 
   function newGame() {
+    setDealerDownHiddenCards([])
+    setDealerDownShownCards([])
+    setDealerCards([])
+    setPlayerDownHiddenCards([])
+    setPlayerDownShownCards([])
+    setPlayerCards([])
+    setPlayPile([])
+    gamesStarted = true;
     setDealerDownHiddenCards([getNextCard('dealerDownHidden'), getNextCard('dealerDownHidden'), getNextCard('dealerDownHidden')]);
     setDealerDownShownCards([getNextCard('dealerDownShown'), getNextCard('dealerDownShown'), getNextCard('dealerDownShown')]);
     setDealerCards([getNextCard('dealerHand'), getNextCard('dealerHand'), getNextCard('dealerHand')]);
@@ -431,27 +439,64 @@ function App() {
     console.log('playerCards', playerCards);
   }
 
-  // function drawPile () {
-  //   let display = []
-  //   for(let card of deckOfCards) {
-  //     if (card.pile === 'pile') {
-  //       display.push(card)
-  //     }
-  //   }
-  //   return display
-  // }
-
-  function playCard (card) {
+  function playCard(card) {
+    setPlayerCards(playerCards.filter((playerCard) => playerCard.display != card.display))
     setPlayPile([...playPile, card])
-    setPlayerCards(playerCards.filter((playerCard)=> playerCard.display != card.display))
+    
   }
-  
+
+  function drawCardButton() {
+    if (playerCards.length < 3 && deckOfCards.length > 0) {
+      setPlayerCards([...playerCards, getNextCard('playerHand')])
+    }
+  }
+
+  function drawCard() {
+    console.log('in draw card');
+    if (deckOfCards.length > 0) {
+      setDealerCards([...dealerCards, getNextCard('dealerHand')])
+    }
+  }
+  function checkDealerCard () {
+    let cardToPlay;
+    // need multiple loops for correct logic
+    // first loops checks to see if equal
+    // second checks to see if greater
+    // third checks for special cards
+    for(let i=0; i<dealerCards.length; i++){
+      if (dealerCards[i].value === playPile[playPile.length-1].value){
+        cardToPlay = dealerCards[i]
+        return cardToPlay
+      } else if (dealerCards[i].value > playPile[playPile.length-1].value){
+        cardToPlay = dealerCards[i]
+        return cardToPlay
+      } else if (dealerCards[i].value === 2 || dealerCards[i].value === 3 || dealerCards[i].value === 10){
+        cardToPlay = dealerCards[i]
+        return cardToPlay
+      } else cardToPlay
+    }
+    return cardToPlay
+  }
+
+  function dealerPlay () {
+    dealerCards.sort((a, b) => a.value - b.value)
+    let cardToPlay = checkDealerCard()
+    console.log('card to play', cardToPlay);
+    console.log('dealer hand', dealerCards);
+    if (cardToPlay){
+      setPlayPile([...playPile, cardToPlay])
+      setDealerCards(dealerCards.filter((dealerCard) => dealerCard.display != cardToPlay.display))
+      drawCard()
+    } else drawCard()
+  }
 
   return (
     <div>
-      <h1>Redux Airport</h1>
+      <h1>3s</h1>
       <button onClick={newGame}>New Game</button>
       <button onClick={viewDeck}>View Deck</button>
+      <button onClick={drawCardButton}>Draw Card</button>
+      <button onClick={dealerPlay}>Dealer Play</button>
       {/* <div><h4>Draw Pile:</h4>
         {deckOfCards.map((card) => (<p>{card.display}</p>))}
       </div> */}
@@ -462,20 +507,20 @@ function App() {
       <div><h4>Play Pile:</h4>
         {playPile && playPile.map((card) => (<p>{card.display}</p>))}
       </div>
-      <div><h4>Dealer down shown:</h4>
+      {/* <div><h4>Dealer down shown:</h4>
         {dealerDownShownCards && dealerDownShownCards.map((card) => (<p>{card.display}</p>))}
-      </div>
-      {/* <div><h4>Dealer hand:</h4>
-        {dealerCards && dealerCards.map((card) => (<p>{card.display}</p>))}
       </div> */}
+      <div><h4>Dealer hand:</h4>
+        {dealerCards && dealerCards.map((card) => (<p>{card.display}</p>))}
+      </div>
       {/* <div><h4>Player down hidden:</h4>
         {playerDownHiddenCards && playerDownHiddenCards.map((card) => (<p>{card.display}</p>))}
       </div> */}
-      <div><h4>Player down shown:</h4>
+      {/* <div><h4>Player down shown:</h4>
         {playerDownShownCards && playerDownShownCards.map((card) => (<p>{card.display}</p>))}
-      </div>
+      </div> */}
       <div><h4>Player hand:</h4>
-        {playerCards && playerCards.map((card) => (<p>{card.display}<button onClick={()=>playCard(card)}>Play Card</button></p>))}
+        {playerCards && playerCards.map((card) => (<p>{card.display}<button onClick={() => playCard(card)}>Play Card</button></p>))}
       </div>
     </div>
   );

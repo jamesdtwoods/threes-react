@@ -13,6 +13,9 @@ const deck = (state=[], action) => {
     if (action.type === 'NEW_GAME') {
         return action.payload
     }
+    if (action.type === 'DRAW_CARD') {
+        return action.payload
+    }
     return state
 }
 

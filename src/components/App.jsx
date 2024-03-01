@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import DrawPile from './drawPile';
+// import DrawPile from './drawPile';
 
 
 function App() {
@@ -382,7 +382,7 @@ function App() {
     //   type: 'NEW_GAME',
     //   payload: deckOfCards
     // })
-  }, [deckOfCards]);
+  }, []);
 
   function shuffleDeck(deck) {
     for (let i = 0; i < deck.length; i++) {
@@ -408,7 +408,7 @@ function App() {
   let [playerCards, setPlayerCards] = useState([])
   let [playerDownHiddenCards, setPlayerDownHiddenCards] = useState([])
   let [playerDownShownCards, setPlayerDownShownCards] = useState([])
-  let play = [];
+  let [playPile, setPlayPile] = useState([])
   let discard = [];
 
 
@@ -441,32 +441,41 @@ function App() {
   //   return display
   // }
 
+  function playCard (card) {
+    setPlayPile([...playPile, card])
+    setPlayerCards(playerCards.filter((playerCard)=> playerCard.display != card.display))
+  }
+  
+
   return (
     <div>
       <h1>Redux Airport</h1>
       <button onClick={newGame}>New Game</button>
       <button onClick={viewDeck}>View Deck</button>
-      <div><h4>Draw Pile:</h4>
+      {/* <div><h4>Draw Pile:</h4>
         {deckOfCards.map((card) => (<p>{card.display}</p>))}
-      </div>
+      </div> */}
 
-      <div><h4>Dealer down hidden:</h4>
+      {/* <div><h4>Dealer down hidden:</h4>
         {dealerDownHiddenCards && dealerDownHiddenCards.map((card) => (<p>{card.display}</p>))}
+      </div> */}
+      <div><h4>Play Pile:</h4>
+        {playPile && playPile.map((card) => (<p>{card.display}</p>))}
       </div>
       <div><h4>Dealer down shown:</h4>
         {dealerDownShownCards && dealerDownShownCards.map((card) => (<p>{card.display}</p>))}
       </div>
-      <div><h4>Dealer hand:</h4>
+      {/* <div><h4>Dealer hand:</h4>
         {dealerCards && dealerCards.map((card) => (<p>{card.display}</p>))}
-      </div>
-      <div><h4>Player down hidden:</h4>
+      </div> */}
+      {/* <div><h4>Player down hidden:</h4>
         {playerDownHiddenCards && playerDownHiddenCards.map((card) => (<p>{card.display}</p>))}
-      </div>
+      </div> */}
       <div><h4>Player down shown:</h4>
         {playerDownShownCards && playerDownShownCards.map((card) => (<p>{card.display}</p>))}
       </div>
       <div><h4>Player hand:</h4>
-        {playerCards && playerCards.map((card) => (<p>{card.display}</p>))}
+        {playerCards && playerCards.map((card) => (<p>{card.display}<button onClick={()=>playCard(card)}>Play Card</button></p>))}
       </div>
     </div>
   );

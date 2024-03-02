@@ -751,12 +751,10 @@ function App() {
           <img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />
         ))}
       </div>
-
-      <div><h4>Dealer down: <button onClick={() => setHidden(!hidden)}>Hide/Show</button></h4>
+      <div><h4>Dealer Cards: <button onClick={() => setHidden(!hidden)}>Hide/Show</button></h4>
         {hidden && dealerDownHiddenCards && dealerDownHiddenCards.map((card) => (<img style={{ height: 90, width: 60, padding: 5 }} src={card.back_img} />))}
         {hidden && dealerDownShownCards && dealerDownShownCards.map((card) => (<img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
-      </div>
-      <div><h4>Dealer hand:</h4>
+        <br />
         {dealerCards && dealerCards.map((card) => (
           <img style={{ height: 90, width: 60, padding: 5 }} src={card.back_img} />
         ))}

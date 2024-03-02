@@ -13,364 +13,468 @@ function App() {
       value: 2,
       display: '2 of hearts',
       property: 'play on any',
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/2_of_hearts.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "hearts",
       value: 3,
       display: '3 of hearts',
       property: 'play on any',
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/3_of_hearts.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "hearts",
       value: 4,
       display: '4 of hearts',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/4_of_hearts.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "hearts",
       value: 5,
       display: '5 of hearts',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/5_of_hearts.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "hearts",
       value: 6,
       display: '6 of hearts',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/6_of_hearts.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "hearts",
       value: 7,
       display: '7 of hearts',
       property: 'under',
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/7_of_hearts.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "hearts",
       value: 8,
       display: '8 of hearts',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/8_of_hearts.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "hearts",
       value: 9,
       display: '9 of hearts',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/9_of_hearts.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "hearts",
       value: 10,
       display: '10 of hearts',
       property: 'play on any',
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/10_of_hearts.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "hearts",
       value: 11,
       display: 'J of hearts',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/jack_of_hearts.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "hearts",
       value: 12,
       display: 'Q of hearts',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/queen_of_hearts.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "hearts",
       value: 13,
       display: 'K of hearts',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/king_of_hearts.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "hearts",
       value: 14,
       display: 'A of hearts',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/ace_of_hearts.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "diamonds",
       value: 2,
       display: '2 of diamonds',
       property: 'play on any',
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/2_of_diamonds.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "diamonds",
       value: 3,
       display: '3 of diamonds',
       property: 'play on any',
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/3_of_diamonds.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "diamonds",
       value: 4,
       display: '4 of diamonds',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/4_of_diamonds.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "diamonds",
       value: 5,
       display: '5 of diamonds',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/5_of_diamonds.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "diamonds",
       value: 6,
       display: '6 of diamonds',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/6_of_diamonds.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "diamonds",
       value: 7,
       display: '7 of diamonds',
       property: 'under',
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/7_of_diamonds.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "diamonds",
       value: 8,
       display: '8 of diamonds',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/8_of_diamonds.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "diamonds",
       value: 9,
       display: '9 of diamonds',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/9_of_diamonds.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "diamonds",
       value: 10,
       display: '10 of diamonds',
       property: 'play on any',
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/10_of_diamonds.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "diamonds",
       value: 11,
       display: 'J of diamonds',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/jack_of_diamonds.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "diamonds",
       value: 12,
       display: 'Q of diamonds',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/queen_of_diamonds.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "diamonds",
       value: 13,
       display: 'K of diamonds',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/king_of_diamonds.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "diamonds",
       value: 14,
       display: 'A of diamonds',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/ace_of_diamonds.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "clubs",
       value: 2,
       display: '2 of clubs',
       property: 'play on any',
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/2_of_clubs.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "clubs",
       value: 3,
       display: '3 of clubs',
       property: 'play on any',
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/3_of_clubs.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "clubs",
       value: 4,
       display: '4 of clubs',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/4_of_clubs.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "clubs",
       value: 5,
       display: '5 of clubs',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/5_of_clubs.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "clubs",
       value: 6,
       display: '6 of clubs',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/6_of_clubs.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "clubs",
       value: 7,
       display: '7 of clubs',
       property: 'under',
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/7_of_clubs.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "clubs",
       value: 8,
       display: '8 of clubs',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/8_of_clubs.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "clubs",
       value: 9,
       display: '9 of clubs',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/9_of_clubs.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "clubs",
       value: 10,
       display: '10 of clubs',
       property: 'play on any',
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/10_of_clubs.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "clubs",
       value: 11,
       display: 'J of clubs',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/jack_of_clubs.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "clubs",
       value: 12,
       display: 'Q of clubs',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/queen_of_clubs.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "clubs",
       value: 13,
       display: 'K of clubs',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/king_of_clubs.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "clubs",
       value: 14,
       display: 'A of clubs',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/ace_of_clubs.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "spades",
       value: 2,
       display: '2 of spades',
       property: 'play on any',
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/2_of_spades.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "spades",
       value: 3,
       display: '3 of spades',
       property: 'play on any',
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/3_of_spades.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "spades",
       value: 4,
       display: '4 of spades',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/4_of_spades.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "spades",
       value: 5,
       display: '5 of spades',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/5_of_spades.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "spades",
       value: 6,
       display: '6 of spades',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/6_of_spades.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "spades",
       value: 7,
       display: '7 of spades',
       property: 'under',
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/7_of_spades.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "spades",
       value: 8,
       display: '8 of spades',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/8_of_spades.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "spades",
       value: 9,
       display: '9 of spades',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/9_of_spades.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "spades",
       value: 10,
       display: '10 of spades',
       property: 'play on any',
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/10_of_spades.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "spades",
       value: 11,
       display: 'J of spades',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/jack_of_spades.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "spades",
       value: 12,
       display: 'Q of spades',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/queen_of_spades.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "spades",
       value: 13,
       display: 'K of spades',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/king_of_spades.png',
+      back_img: 'cardPictures/back_of_card.png'
     },
     {
       suite: "spades",
       value: 14,
       display: 'A of spades',
       property: null,
-      pile: 'draw'
+      pile: 'draw',
+      front_img: 'cardPictures/ace_of_spades.png',
+      back_img: 'cardPictures/back_of_card.png'
     }
   ]
   let gamesStarted = false;
@@ -541,6 +645,34 @@ function App() {
     // if cardToPlay is defined, play the card, else draw
     if (cardToPlay) {
       let updatedHand = dealerCards.filter((dealerCard) => dealerCard.display != cardToPlay.display)
+      if (cardToPlay === 3) {
+        if (updatedHand.length < 3) {
+          return (
+            playerCards.push.apply(playerCards, playPile),
+            setPlayerCards(playerCards),
+            setPlayPile([]),
+            setDealerCards([...updatedHand, getNextCard('dealerHand')])
+          )
+        } else return (
+          playerCards.push.apply(playerCards, playPile),
+          setPlayerCards(playerCards),
+          setPlayPile([]),
+          setDealerCards(updatedHand)
+        )
+      }
+      if (cardToPlay === 10) {
+        if (updatedHand.length < 3) {
+          return (
+            setDiscardPile(playPile),
+            setPlayPile([]),
+            setDealerCards([...updatedHand, getNextCard('dealerHand')])
+          )
+        } else return (
+          setDiscardPile(playPile),
+          setPlayPile([]),
+          setDealerCards(updatedHand)
+        )
+      }
       if (updatedHand.length < 3) {
         return (
           setPlayPile([...playPile, cardToPlay]),
@@ -548,7 +680,7 @@ function App() {
         )
       } else return (
         setPlayPile([...playPile, cardToPlay]),
-        setDealerCards([updatedHand])
+        setDealerCards(updatedHand)
       )
     } else dealerCards.push.apply(dealerCards, playPile)
     setDealerCards(dealerCards)
@@ -581,6 +713,8 @@ function App() {
     } else return false
   }
 
+  // need function to check if 4 in a row in play pile
+
   return (
     <div>
       <h1>3s</h1>
@@ -589,30 +723,33 @@ function App() {
       <button onClick={drawCardButton}>Draw Card</button>
       <button onClick={dealerPlay}>Dealer Play</button>
       <button onClick={pickUp}>Pick Up</button>
-      {/* <div><h4>Draw Pile:</h4>
-        {deckOfCards.map((card) => (<p>{card.display}</p>))}
-      </div> */}
 
       {/* <div><h4>Dealer down hidden:</h4>
         {dealerDownHiddenCards && dealerDownHiddenCards.map((card) => (<p>{card.display}</p>))}
-      </div> */}
+        </div> */}
       <div><h4>Play Pile:</h4>
-        {playPile && playPile.map((card) => (<p>{card.display}</p>))}
+        {playPile && playPile.map((card) => (
+        <img style={{ height: 80, width: 60 }} src={card.front_img}/>
+        ))}
       </div>
       {/* <div><h4>Dealer down shown:</h4>
         {dealerDownShownCards && dealerDownShownCards.map((card) => (<p>{card.display}</p>))}
-      </div> */}
+        </div> */}
       <div><h4>Dealer hand:</h4>
-        {dealerCards && dealerCards.map((card) => (<p>{card.display}</p>))}
+        {dealerCards && dealerCards.map((card) => (
+        <img style={{ height: 80, width: 60 }} src={card.front_img}/>
+        ))}
       </div>
       {/* <div><h4>Player down hidden:</h4>
         {playerDownHiddenCards && playerDownHiddenCards.map((card) => (<p>{card.display}</p>))}
-      </div> */}
+        </div> */}
       {/* <div><h4>Player down shown:</h4>
         {playerDownShownCards && playerDownShownCards.map((card) => (<p>{card.display}</p>))}
-      </div> */}
+        </div> */}
       <div><h4>Player hand:</h4>
-        {playerCards && playerCards.map((card) => (<p>{card.display}<button onClick={() => playCard(card)}>Play Card</button></p>))}
+        {playerCards && playerCards.map((card) => (
+        <img onClick={() => playCard(card)} style={{ height: 80, width: 60 }} src={card.front_img}/>
+        ))}
       </div>
     </div>
   );

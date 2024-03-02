@@ -383,13 +383,14 @@ function App() {
   let [playerDownHiddenCards, setPlayerDownHiddenCards] = useState([])
   let [playerDownShownCards, setPlayerDownShownCards] = useState([])
   let [playPile, setPlayPile] = useState([])
-  let [drawDeck, setDrawDeck] = useState(deckOfCards)
+  let [drawDeck, setDrawDeck] = useState([])
   let [discardPile, setDiscardPile] = useState([])
 
   // shuffleDeck(deckOfCards)
 
   useEffect(() => {
     shuffleDeck(deckOfCards)
+    setDrawDeck(deckOfCards)
     // dispatch({
     //   type: 'NEW_GAME',
     //   payload: deckOfCards
@@ -413,6 +414,7 @@ function App() {
   }
 
   function newGame() {
+    // need a way to reset deck
     setDealerDownHiddenCards([])
     setDealerDownShownCards([])
     setDealerCards([])
@@ -430,6 +432,7 @@ function App() {
   }
 
   function viewDeck() {
+    console.log('deck of cards', deckOfCards);
     console.log('drawDeck', drawDeck);
     console.log('dealerDownHiddenCards', dealerDownHiddenCards);
     console.log('dealerDownShownCards', dealerDownShownCards);
@@ -442,10 +445,10 @@ function App() {
   function playCard(card) {
     if (checkLogic(card)) {
       let updatedHand = playerCards.filter((playerCard) => playerCard.display != card.display)
-      if (updatedHand.length < 3){
+      if (updatedHand.length < 3) {
         setPlayerCards([...updatedHand, getNextCard('playerHand')])
       }
-      if (updatedHand.length >= 3){
+      if (updatedHand.length >= 3) {
         setPlayerCards([...updatedHand])
       }
       if (card.value === 3) {
@@ -467,17 +470,49 @@ function App() {
 
   function drawCard() {
     console.log('in draw card');
-    if (deckOfCards.length > 0) {
+    if (drawDeck.length > 0) {
       setDealerCards([...dealerCards, getNextCard('dealerHand')])
     }
   }
 
+  // returns a valid card object if dealer has cards to play, otherwise returns undefined
   function checkDealerCard() {
     let cardToPlay;
     if (playPile.length === 0) {
       // loop over to find the best card to play??
-      cardToPlay = dealerCards[0]
+      for (let i = 0; i < dealerCards.length; i++) {
+        if (dealerCards[i].value != 2 && dealerCards[i].value != 3 && dealerCards[i].value != 10) {
+          cardToPlay = dealerCards[i]
+          return cardToPlay
+        }
+      }
+      for (let i = 0; i < dealerCards.length; i++) {
+        if (dealerCards[i].value = 2) {
+          cardToPlay = dealerCards[i]
+          return cardToPlay
+        }
+      }
+      for (let i = 0; i < dealerCards.length; i++) {
+        if (dealerCards[i].value = 10) {
+          cardToPlay = dealerCards[i]
+          return cardToPlay
+        }
+      }
+      for (let i = 0; i < dealerCards.length; i++) {
+        if (dealerCards[i].value = 3) {
+          cardToPlay = dealerCards[i]
+          return cardToPlay
+        }
+      }
       return cardToPlay
+    }
+    if (playPile[playPile.length - 1].value === 7) {
+      for (let i = 0; i < dealerCards.length; i++) {
+        if (dealerCards[i].value <= 7) {
+          cardToPlay = dealerCards[i]
+          return cardToPlay
+        } else dealerPickUp()
+      }
     }
     for (let i = 0; i < dealerCards.length; i++) {
       if (dealerCards[i].value === playPile[playPile.length - 1].value) {
@@ -503,19 +538,32 @@ function App() {
   function dealerPlay() {
     dealerCards.sort((a, b) => a.value - b.value)
     let cardToPlay = checkDealerCard()
+    // if cardToPlay is defined, play the card, else draw
     if (cardToPlay) {
       let updatedHand = dealerCards.filter((dealerCard) => dealerCard.display != cardToPlay.display)
-      return (
+      if (updatedHand.length < 3) {
+        return (
+          setPlayPile([...playPile, cardToPlay]),
+          setDealerCards([...updatedHand, getNextCard('dealerHand')])
+        )
+      } else return (
         setPlayPile([...playPile, cardToPlay]),
-        setDealerCards([...updatedHand, getNextCard('dealerHand')])
+        setDealerCards([updatedHand])
       )
-    }
-    drawCard()
+    } else dealerCards.push.apply(dealerCards, playPile)
+    setDealerCards(dealerCards)
+    setPlayPile([])
   }
 
   function pickUp() {
     playerCards.push.apply(playerCards, playPile)
     setPlayerCards(playerCards)
+    setPlayPile([])
+  }
+
+  function dealerPickUp() {
+    dealerCards.push.apply(dealerCards, playPile)
+    setDealerCards(dealerCards)
     setPlayPile([])
   }
 

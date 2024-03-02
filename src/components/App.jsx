@@ -513,10 +513,13 @@ function App() {
   }
 
   function getNextCard(pile) {
-    let nextCard = drawDeck.shift()
-    nextCard.pile = pile
-    setDrawDeck(drawDeck)
-    return nextCard
+    if (drawDeck.length > 0) {
+      let nextCard = drawDeck.shift()
+      nextCard.pile = pile
+      setDrawDeck(drawDeck)
+      return nextCard
+    }
+
   }
 
   function newGame() {
@@ -551,18 +554,22 @@ function App() {
     gamesStarted = true;
     if (checkLogic(card)) {
       let updatedHand = playerCards.filter((playerCard) => playerCard.display != card.display)
-      if (updatedHand.length < 3) {
+      if (updatedHand.length < 3 && drawDeck.length > 0) {
         setPlayerCards([...updatedHand, getNextCard('playerHand')])
+      } else if (updatedHand.length < 3 && drawDeck.length === 0) {
+        setPlayerCards(updatedHand)
       }
       if (updatedHand.length >= 3) {
-        setPlayerCards([...updatedHand])
+        setPlayerCards(updatedHand)
       }
       if (card.value === 3) {
+        setDiscardPile([...discardPile, card]),
         dealerCards.push.apply(dealerCards, playPile)
         setDealerCards(dealerCards)
         setPlayPile([])
       } else if (card.value === 10) {
-        setDiscardPile(playPile)
+        discardPile.push.apply(discardPile, playPile),
+        setDiscardPile(discardPile),
         setPlayPile([])
       } else setPlayPile([...playPile, card])
     } else alert('cant play that')
@@ -653,6 +660,7 @@ function App() {
             playerCards.push.apply(playerCards, playPile),
             setPlayerCards(playerCards),
             setPlayPile([]),
+            setDiscardPile([...discardPile, cardToPlay]),
             setDealerCards([...updatedHand, getNextCard('dealerHand')])
           )
         } else return (
@@ -665,12 +673,14 @@ function App() {
       if (cardToPlay.value === 10) {
         if (updatedHand.length < 3) {
           return (
-            setDiscardPile(playPile),
+            discardPile.push.apply(discardPile, playPile),
+            setDiscardPile(discardPile),
             setPlayPile([]),
             setDealerCards([...updatedHand, getNextCard('dealerHand')])
           )
         } else return (
-          setDiscardPile(playPile),
+          discardPile.push.apply(discardPile, playPile),
+          setDiscardPile(discardPile),
           setPlayPile([]),
           setDealerCards(updatedHand)
         )
@@ -716,9 +726,11 @@ function App() {
   }
 
   // need function to check if 4 in a row in play pile
-  // automotically play multiple of same card from hand
+  // automotically play multiple of same card from hand??
   // end game logic
-  //
+  // swap cards at begining
+  // have computer be able to swap cards 
+  // ability to 3 computer back
 
   return (
     <div>
@@ -728,24 +740,28 @@ function App() {
       <button onClick={pickUp}>Pick Up</button>
       <br />
       <br />
-      <br />
       <button onClick={dealerPlay}>Dealer Play</button>
 
-      <div><h4>Play Pile:</h4>
+      <div><h4>Discard and Play Pile:</h4>
+        {discardPile && discardPile.map((card) => (
+          <img style={{ height: 45, width: 30, padding: 1 }} src={card.back_img} />
+        ))}
+        <br />
         {playPile && playPile.map((card) => (
           <img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />
         ))}
       </div>
-      <div><h4>Dealer down: <button onClick={()=>setHidden(!hidden)}>Hide/Show</button></h4>
+
+      <div><h4>Dealer down: <button onClick={() => setHidden(!hidden)}>Hide/Show</button></h4>
         {hidden && dealerDownHiddenCards && dealerDownHiddenCards.map((card) => (<img style={{ height: 90, width: 60, padding: 5 }} src={card.back_img} />))}
         {hidden && dealerDownShownCards && dealerDownShownCards.map((card) => (<img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
       </div>
       <div><h4>Dealer hand:</h4>
         {dealerCards && dealerCards.map((card) => (
-          <img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />
+          <img style={{ height: 90, width: 60, padding: 5 }} src={card.back_img} />
         ))}
       </div>
-      <div><h4>Player down: <button onClick={()=>setHidden(!hidden)}>Hide/Show</button></h4>
+      <div><h4>Player down: <button onClick={() => setHidden(!hidden)}>Hide/Show</button></h4>
         {hidden && playerDownHiddenCards && playerDownHiddenCards.map((card) => (<img style={{ height: 90, width: 60, padding: 5 }} src={card.back_img} />))}
         {hidden && playerDownShownCards && playerDownShownCards.map((card) => (<img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
       </div>

@@ -384,7 +384,8 @@ function App() {
   let [playerDownShownCards, setPlayerDownShownCards] = useState([])
   let [playPile, setPlayPile] = useState([])
   let [drawDeck, setDrawDeck] = useState(deckOfCards)
-  let discard = [];
+  let [discardPile, setDiscardPile] = useState([])
+
   // shuffleDeck(deckOfCards)
 
   useEffect(() => {
@@ -410,9 +411,6 @@ function App() {
     setDrawDeck(drawDeck)
     return nextCard
   }
-
-
-
 
   function newGame() {
     setDealerDownHiddenCards([])
@@ -442,9 +440,16 @@ function App() {
   }
 
   function playCard(card) {
-    setPlayerCards(playerCards.filter((playerCard) => playerCard.display != card.display))
-    setPlayPile([...playPile, card])
-
+    let updatedHand = playerCards.filter((playerCard) => playerCard.display != card.display)
+    setPlayerCards([...updatedHand, getNextCard('playerHand')])
+    if (card.value === 3) {
+      dealerCards.push.apply(dealerCards, playPile)
+      setDealerCards(dealerCards)
+      setPlayPile([])
+    } else if (card.value === 10) {
+      setDiscardPile(playPile)
+      setPlayPile([])
+    } else setPlayPile([...playPile, card])
   }
 
   function drawCardButton() {
@@ -459,6 +464,7 @@ function App() {
       setDealerCards([...dealerCards, getNextCard('dealerHand')])
     }
   }
+
   function checkDealerCard() {
     let cardToPlay;
     // need multiple loops for correct logic

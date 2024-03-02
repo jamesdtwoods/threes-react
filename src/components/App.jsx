@@ -440,16 +440,23 @@ function App() {
   }
 
   function playCard(card) {
-    let updatedHand = playerCards.filter((playerCard) => playerCard.display != card.display)
-    setPlayerCards([...updatedHand, getNextCard('playerHand')])
-    if (card.value === 3) {
-      dealerCards.push.apply(dealerCards, playPile)
-      setDealerCards(dealerCards)
-      setPlayPile([])
-    } else if (card.value === 10) {
-      setDiscardPile(playPile)
-      setPlayPile([])
-    } else setPlayPile([...playPile, card])
+    if (checkLogic(card)) {
+      let updatedHand = playerCards.filter((playerCard) => playerCard.display != card.display)
+      if (updatedHand.length < 3){
+        setPlayerCards([...updatedHand, getNextCard('playerHand')])
+      }
+      if (updatedHand.length >= 3){
+        setPlayerCards([...updatedHand])
+      }
+      if (card.value === 3) {
+        dealerCards.push.apply(dealerCards, playPile)
+        setDealerCards(dealerCards)
+        setPlayPile([])
+      } else if (card.value === 10) {
+        setDiscardPile(playPile)
+        setPlayPile([])
+      } else setPlayPile([...playPile, card])
+    } else alert('cant play that')
   }
 
   function drawCardButton() {
@@ -471,17 +478,27 @@ function App() {
     // first loops checks to see if equal
     // second checks to see if greater
     // third checks for special cards
+    if (playPile.length === 0) {
+      cardToPlay = dealerCards[0]
+      return cardToPlay
+    }
     for (let i = 0; i < dealerCards.length; i++) {
       if (dealerCards[i].value === playPile[playPile.length - 1].value) {
         cardToPlay = dealerCards[i]
         return cardToPlay
-      } else if (dealerCards[i].value > playPile[playPile.length - 1].value) {
+      }
+    }
+    for (let i = 0; i < dealerCards.length; i++) {
+      if (dealerCards[i].value > playPile[playPile.length - 1].value) {
         cardToPlay = dealerCards[i]
         return cardToPlay
-      } else if (dealerCards[i].value === 2 || dealerCards[i].value === 3 || dealerCards[i].value === 10) {
+      }
+    }
+    for (let i = 0; i < dealerCards.length; i++) {
+      if (dealerCards[i].value === 2 || dealerCards[i].value === 3 || dealerCards[i].value === 10) {
         cardToPlay = dealerCards[i]
         return cardToPlay
-      } else cardToPlay
+      }
     }
     return cardToPlay
   }
@@ -495,7 +512,7 @@ function App() {
         setPlayPile([...playPile, cardToPlay]),
         setDealerCards([...updatedHand, getNextCard('dealerHand')])
       )
-    } 
+    }
     drawCard()
   }
 
@@ -503,6 +520,20 @@ function App() {
     playerCards.push.apply(playerCards, playPile)
     setPlayerCards(playerCards)
     setPlayPile([])
+  }
+
+  function checkLogic(card) {
+    if (playPile.length === 0) {
+      return true
+    } else if (card.value === 2 || card.value === 3 || card.value === 10) {
+      return true
+    } else if (playPile[playPile.length - 1].value === 7 && card.value <= 7) {
+      return true
+    } else if (playPile[playPile.length - 1].value === 7 && card.value > 7) {
+      return false
+    } else if (playPile[playPile.length - 1].value <= card.value) {
+      return true
+    } else return false
   }
 
   return (

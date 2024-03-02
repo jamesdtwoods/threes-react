@@ -474,11 +474,8 @@ function App() {
 
   function checkDealerCard() {
     let cardToPlay;
-    // need multiple loops for correct logic
-    // first loops checks to see if equal
-    // second checks to see if greater
-    // third checks for special cards
     if (playPile.length === 0) {
+      // loop over to find the best card to play??
       cardToPlay = dealerCards[0]
       return cardToPlay
     }

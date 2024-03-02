@@ -645,7 +645,7 @@ function App() {
     // if cardToPlay is defined, play the card, else draw
     if (cardToPlay) {
       let updatedHand = dealerCards.filter((dealerCard) => dealerCard.display != cardToPlay.display)
-      if (cardToPlay === 3) {
+      if (cardToPlay.value === 3) {
         if (updatedHand.length < 3) {
           return (
             playerCards.push.apply(playerCards, playPile),
@@ -660,7 +660,7 @@ function App() {
           setDealerCards(updatedHand)
         )
       }
-      if (cardToPlay === 10) {
+      if (cardToPlay.value === 10) {
         if (updatedHand.length < 3) {
           return (
             setDiscardPile(playPile),
@@ -729,7 +729,7 @@ function App() {
         </div> */}
       <div><h4>Play Pile:</h4>
         {playPile && playPile.map((card) => (
-        <img style={{ height: 80, width: 60 }} src={card.front_img}/>
+        <img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img}/>
         ))}
       </div>
       {/* <div><h4>Dealer down shown:</h4>
@@ -737,7 +737,7 @@ function App() {
         </div> */}
       <div><h4>Dealer hand:</h4>
         {dealerCards && dealerCards.map((card) => (
-        <img style={{ height: 80, width: 60 }} src={card.front_img}/>
+        <img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img}/>
         ))}
       </div>
       {/* <div><h4>Player down hidden:</h4>
@@ -748,7 +748,7 @@ function App() {
         </div> */}
       <div><h4>Player hand:</h4>
         {playerCards && playerCards.map((card) => (
-        <img onClick={() => playCard(card)} style={{ height: 80, width: 60 }} src={card.front_img}/>
+        <img onClick={() => playCard(card)} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img}/>
         ))}
       </div>
     </div>

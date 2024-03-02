@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
+import './App.css'
 // import DrawPile from './drawPile';
 
 
@@ -489,6 +490,7 @@ function App() {
   let [playPile, setPlayPile] = useState([])
   let [drawDeck, setDrawDeck] = useState([])
   let [discardPile, setDiscardPile] = useState([])
+  let [hidden, setHidden] = useState(true)
 
   // shuffleDeck(deckOfCards)
 
@@ -526,7 +528,6 @@ function App() {
     setPlayerDownShownCards([])
     setPlayerCards([])
     setPlayPile([])
-    gamesStarted = true;
     setDealerDownHiddenCards([getNextCard('dealerDownHidden'), getNextCard('dealerDownHidden'), getNextCard('dealerDownHidden')]);
     setDealerDownShownCards([getNextCard('dealerDownShown'), getNextCard('dealerDownShown'), getNextCard('dealerDownShown')]);
     setDealerCards([getNextCard('dealerHand'), getNextCard('dealerHand'), getNextCard('dealerHand')]);
@@ -547,6 +548,7 @@ function App() {
   }
 
   function playCard(card) {
+    gamesStarted = true;
     if (checkLogic(card)) {
       let updatedHand = playerCards.filter((playerCard) => playerCard.display != card.display)
       if (updatedHand.length < 3) {
@@ -714,41 +716,42 @@ function App() {
   }
 
   // need function to check if 4 in a row in play pile
+  // automotically play multiple of same card from hand
+  // end game logic
+  //
 
   return (
     <div>
-      <h1>3s</h1>
       <button onClick={newGame}>New Game</button>
-      <button onClick={viewDeck}>View Deck</button>
-      <button onClick={drawCardButton}>Draw Card</button>
-      <button onClick={dealerPlay}>Dealer Play</button>
+      {/* <button onClick={viewDeck}>View Deck</button> */}
+      {/* <button onClick={drawCardButton}>Draw Card</button> */}
       <button onClick={pickUp}>Pick Up</button>
+      <br />
+      <br />
+      <br />
+      <button onClick={dealerPlay}>Dealer Play</button>
 
-      {/* <div><h4>Dealer down hidden:</h4>
-        {dealerDownHiddenCards && dealerDownHiddenCards.map((card) => (<p>{card.display}</p>))}
-        </div> */}
       <div><h4>Play Pile:</h4>
         {playPile && playPile.map((card) => (
-        <img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img}/>
+          <img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />
         ))}
       </div>
-      {/* <div><h4>Dealer down shown:</h4>
-        {dealerDownShownCards && dealerDownShownCards.map((card) => (<p>{card.display}</p>))}
-        </div> */}
+      <div><h4>Dealer down: <button onClick={()=>setHidden(!hidden)}>Hide/Show</button></h4>
+        {hidden && dealerDownHiddenCards && dealerDownHiddenCards.map((card) => (<img style={{ height: 90, width: 60, padding: 5 }} src={card.back_img} />))}
+        {hidden && dealerDownShownCards && dealerDownShownCards.map((card) => (<img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
+      </div>
       <div><h4>Dealer hand:</h4>
         {dealerCards && dealerCards.map((card) => (
-        <img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img}/>
+          <img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />
         ))}
       </div>
-      {/* <div><h4>Player down hidden:</h4>
-        {playerDownHiddenCards && playerDownHiddenCards.map((card) => (<p>{card.display}</p>))}
-        </div> */}
-      {/* <div><h4>Player down shown:</h4>
-        {playerDownShownCards && playerDownShownCards.map((card) => (<p>{card.display}</p>))}
-        </div> */}
+      <div><h4>Player down: <button onClick={()=>setHidden(!hidden)}>Hide/Show</button></h4>
+        {hidden && playerDownHiddenCards && playerDownHiddenCards.map((card) => (<img style={{ height: 90, width: 60, padding: 5 }} src={card.back_img} />))}
+        {hidden && playerDownShownCards && playerDownShownCards.map((card) => (<img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
+      </div>
       <div><h4>Player hand:</h4>
         {playerCards && playerCards.map((card) => (
-        <img onClick={() => playCard(card)} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img}/>
+          <img onClick={() => playCard(card)} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />
         ))}
       </div>
     </div>

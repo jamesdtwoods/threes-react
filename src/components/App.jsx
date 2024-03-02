@@ -373,11 +373,22 @@ function App() {
       pile: 'draw'
     }
   ]
-
-  shuffleDeck(deckOfCards)
+  let gamesStarted = false;
+  let gameOver = false;
+  let playerWon = false;
+  let [dealerCards, setDealerCards] = useState([])
+  let [dealerDownHiddenCards, setDealerDownHiddenCards] = useState([])
+  let [dealerDownShownCards, setDealerDownShownCards] = useState([])
+  let [playerCards, setPlayerCards] = useState([])
+  let [playerDownHiddenCards, setPlayerDownHiddenCards] = useState([])
+  let [playerDownShownCards, setPlayerDownShownCards] = useState([])
+  let [playPile, setPlayPile] = useState([])
+  let [drawDeck, setDrawDeck] = useState(deckOfCards)
+  let discard = [];
+  // shuffleDeck(deckOfCards)
 
   useEffect(() => {
-    // shuffleDeck(deckOfCards)
+    shuffleDeck(deckOfCards)
     // dispatch({
     //   type: 'NEW_GAME',
     //   payload: deckOfCards
@@ -394,22 +405,13 @@ function App() {
   }
 
   function getNextCard(pile) {
-    let nextCard = deckOfCards.shift()
+    let nextCard = drawDeck.shift()
     nextCard.pile = pile
+    setDrawDeck(drawDeck)
     return nextCard
   }
 
-  let gamesStarted = false;
-  let gameOver = false;
-  let playerWon = false;
-  let [dealerCards, setDealerCards] = useState([])
-  let [dealerDownHiddenCards, setDealerDownHiddenCards] = useState([])
-  let [dealerDownShownCards, setDealerDownShownCards] = useState([])
-  let [playerCards, setPlayerCards] = useState([])
-  let [playerDownHiddenCards, setPlayerDownHiddenCards] = useState([])
-  let [playerDownShownCards, setPlayerDownShownCards] = useState([])
-  let [playPile, setPlayPile] = useState([])
-  let discard = [];
+
 
 
   function newGame() {
@@ -430,7 +432,7 @@ function App() {
   }
 
   function viewDeck() {
-    console.log('deck from store', deckOfCards);
+    console.log('drawDeck', drawDeck);
     console.log('dealerDownHiddenCards', dealerDownHiddenCards);
     console.log('dealerDownShownCards', dealerDownShownCards);
     console.log('dealerCards', dealerCards);
@@ -442,7 +444,7 @@ function App() {
   function playCard(card) {
     setPlayerCards(playerCards.filter((playerCard) => playerCard.display != card.display))
     setPlayPile([...playPile, card])
-    
+
   }
 
   function drawCardButton() {
@@ -457,20 +459,20 @@ function App() {
       setDealerCards([...dealerCards, getNextCard('dealerHand')])
     }
   }
-  function checkDealerCard () {
+  function checkDealerCard() {
     let cardToPlay;
     // need multiple loops for correct logic
     // first loops checks to see if equal
     // second checks to see if greater
     // third checks for special cards
-    for(let i=0; i<dealerCards.length; i++){
-      if (dealerCards[i].value === playPile[playPile.length-1].value){
+    for (let i = 0; i < dealerCards.length; i++) {
+      if (dealerCards[i].value === playPile[playPile.length - 1].value) {
         cardToPlay = dealerCards[i]
         return cardToPlay
-      } else if (dealerCards[i].value > playPile[playPile.length-1].value){
+      } else if (dealerCards[i].value > playPile[playPile.length - 1].value) {
         cardToPlay = dealerCards[i]
         return cardToPlay
-      } else if (dealerCards[i].value === 2 || dealerCards[i].value === 3 || dealerCards[i].value === 10){
+      } else if (dealerCards[i].value === 2 || dealerCards[i].value === 3 || dealerCards[i].value === 10) {
         cardToPlay = dealerCards[i]
         return cardToPlay
       } else cardToPlay
@@ -478,16 +480,22 @@ function App() {
     return cardToPlay
   }
 
-  function dealerPlay () {
+  function dealerPlay() {
     dealerCards.sort((a, b) => a.value - b.value)
     let cardToPlay = checkDealerCard()
     console.log('card to play', cardToPlay);
     console.log('dealer hand', dealerCards);
-    if (cardToPlay){
+    if (cardToPlay) {
       setPlayPile([...playPile, cardToPlay])
       setDealerCards(dealerCards.filter((dealerCard) => dealerCard.display != cardToPlay.display))
       drawCard()
     } else drawCard()
+  }
+
+  function pickUp() {
+    playerCards.push.apply(playerCards, playPile)
+    setPlayerCards(playerCards)
+    setPlayPile([])
   }
 
   return (
@@ -497,6 +505,7 @@ function App() {
       <button onClick={viewDeck}>View Deck</button>
       <button onClick={drawCardButton}>Draw Card</button>
       <button onClick={dealerPlay}>Dealer Play</button>
+      <button onClick={pickUp}>Pick Up</button>
       {/* <div><h4>Draw Pile:</h4>
         {deckOfCards.map((card) => (<p>{card.display}</p>))}
       </div> */}

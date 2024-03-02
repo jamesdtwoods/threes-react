@@ -483,13 +483,14 @@ function App() {
   function dealerPlay() {
     dealerCards.sort((a, b) => a.value - b.value)
     let cardToPlay = checkDealerCard()
-    console.log('card to play', cardToPlay);
-    console.log('dealer hand', dealerCards);
     if (cardToPlay) {
-      setPlayPile([...playPile, cardToPlay])
-      setDealerCards(dealerCards.filter((dealerCard) => dealerCard.display != cardToPlay.display))
-      drawCard()
-    } else drawCard()
+      let updatedHand = dealerCards.filter((dealerCard) => dealerCard.display != cardToPlay.display)
+      return (
+        setPlayPile([...playPile, cardToPlay]),
+        setDealerCards([...updatedHand, getNextCard('dealerHand')])
+      )
+    } 
+    drawCard()
   }
 
   function pickUp() {

@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
 
 
@@ -478,19 +481,23 @@ function App() {
     }
   ]
   let gamesStarted = false;
-  let turn = 0;
+  const [swap, setSwap] = useState(false);
   let gameOver = false;
   let playerWon = false;
-  let [dealerCards, setDealerCards] = useState([])
-  let [dealerDownHiddenCards, setDealerDownHiddenCards] = useState([])
-  let [dealerDownShownCards, setDealerDownShownCards] = useState([])
-  let [playerCards, setPlayerCards] = useState([])
-  let [playerDownHiddenCards, setPlayerDownHiddenCards] = useState([])
-  let [playerDownShownCards, setPlayerDownShownCards] = useState([])
-  let [playPile, setPlayPile] = useState([])
-  let [drawDeck, setDrawDeck] = useState([])
-  let [discardPile, setDiscardPile] = useState([])
-  let [hidden, setHidden] = useState(true)
+  const [dealerCards, setDealerCards] = useState([])
+  const [dealerDownHiddenCards, setDealerDownHiddenCards] = useState([])
+  const [dealerDownShownCards, setDealerDownShownCards] = useState([])
+  const [playerCards, setPlayerCards] = useState([])
+  const [playerDownHiddenCards, setPlayerDownHiddenCards] = useState([])
+  const [playerDownShownCards, setPlayerDownShownCards] = useState([])
+  const [playPile, setPlayPile] = useState([])
+  const [drawDeck, setDrawDeck] = useState([])
+  const [discardPile, setDiscardPile] = useState([])
+  const [hidden, setHidden] = useState(true)
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   // shuffleDeck(deckOfCards)
 
@@ -525,6 +532,7 @@ function App() {
   function newGame() {
     // need a way to reset deck
     gamesStarted = true;
+    setSwap(true)
     setDealerDownHiddenCards([])
     setDealerDownShownCards([])
     setDealerCards([])
@@ -552,7 +560,7 @@ function App() {
   }
 
   function playCard(card, pile) {
-    turn++;
+    setSwap(false)
     playerCards.sort((a, b) => a.value - b.value)
     if (checkLogic(card) && pile === 'hand') {
       let updatedHand = playerCards.filter((playerCard) => playerCard.display != card.display)
@@ -594,7 +602,6 @@ function App() {
     } else if (pile === 'hidden') {
       checkLogicHidden(card)
     }
-
   }
 
   function drawCardButton() {
@@ -779,6 +786,18 @@ function App() {
     } else return false
   }
 
+  function sendCardToHandFromDown(card) {
+    let updatedHand = playerDownShownCards.filter((playerCard) => playerCard.display != card.display)
+    setPlayerDownShownCards(updatedHand)
+    setPlayerCards([...playerCards, card])
+  }
+
+  function sendCardToDownFromHand(card) {
+    let updatedHand = playerCards.filter((playerCard) => playerCard.display != card.display)
+    setPlayerCards(updatedHand)
+    setPlayerDownShownCards([...playerDownShownCards, card])
+  }
+
   // need function to check if 4 in a row in play pile
   // automotically play multiple of same card from hand??
   // end game logic - 
@@ -789,15 +808,13 @@ function App() {
 
   return (
     <div>
-      <button onClick={newGame}>New Game</button>
-      <button onClick={viewDeck}>View Deck</button>
-      {/* <button onClick={drawCardButton}>Draw Card</button> */}
-      <button onClick={pickUp}>Pick Up</button>
+      <Button variant="light" onClick={newGame}>New Game</Button>
+      <Button variant="light" onClick={viewDeck}>View Deck</Button>
+      {/* <Button variant="light" onClick={drawCardButton}>Draw Card</Button> */}
+      <Button variant="light" onClick={pickUp}>Pick Up</Button>
       <br />
       <br />
-      <button onClick={dealerPlay}>Dealer Play</button>
-
-
+      <Button variant="light" onClick={dealerPlay}>Dealer Play</Button>
       <div><h4>Draw Pile:</h4>
         {drawDeck && drawDeck.map((card) => (
           <img style={{ height: 18, width: 12, padding: 1 }} src={card.back_img} />
@@ -812,7 +829,7 @@ function App() {
           <img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />
         ))}
       </div>
-      <div><h4>Dealer Cards: <button onClick={() => setHidden(!hidden)}>Hide/Show</button></h4>
+      <div><h4>Dealer Cards: <Button variant="light" onClick={() => setHidden(!hidden)}>Hide/Show</Button></h4>
         {hidden && dealerDownHiddenCards && dealerDownHiddenCards.map((card) => (<img style={{ height: 90, width: 60, padding: 5 }} src={card.back_img} />))}
         {hidden && dealerDownShownCards && dealerDownShownCards.map((card) => (<img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
         <br />
@@ -820,7 +837,7 @@ function App() {
           <img style={{ height: 90, width: 60, padding: 5 }} src={card.back_img} />
         ))}
       </div>
-      <div><h4>Player down: <button onClick={() => setHidden(!hidden)}>Hide/Show</button> {turn === 0 && <button onClick={() => setHidden(!hidden)}>Swap</button>}</h4>
+      <div><h4>Player down: <Button variant="light" onClick={() => setHidden(!hidden)}>Hide/Show</Button> {swap ? <Button variant="light" onClick={handleShow}>Swap</Button> : <></>}</h4>
         {hidden &&
           <>
             {playerDownHiddenCards && playerDownShownCards.length > 0 ?
@@ -840,6 +857,24 @@ function App() {
           <img onClick={() => playCard(card, 'hand')} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />
         ))}
       </div>
+      <Modal  show={show} onHide={handleClose} animation={false}>
+        <Modal.Header closeButton>
+          <Modal.Title>Click to swap cards</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div class="bg-success"><h4>Player Down:</h4>
+            {playerDownShownCards.map((card) => (<img onClick={() => sendCardToHandFromDown(card)} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
+          </div>
+          <div class="bg-success"><h4>Player hand:</h4>
+            {playerCards && playerCards.map((card) => (<img onClick={() => sendCardToDownFromHand(card)} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="light" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

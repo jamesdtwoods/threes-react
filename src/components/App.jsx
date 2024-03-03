@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import './App.css'
-// import DrawPile from './drawPile';
 
 
 function App() {
@@ -550,9 +549,10 @@ function App() {
     console.log('playerCards', playerCards);
   }
 
-  function playCard(card) {
+  function playCard(card, pile) {
     gamesStarted = true;
-    if (checkLogic(card)) {
+    playerCards.sort((a, b) => a.value - b.value)
+    if (checkLogic(card) && pile === 'hand') {
       let updatedHand = playerCards.filter((playerCard) => playerCard.display != card.display)
       if (updatedHand.length < 3 && drawDeck.length > 0) {
         setPlayerCards([...updatedHand, getNextCard('playerHand')])
@@ -563,16 +563,36 @@ function App() {
         setPlayerCards(updatedHand)
       }
       if (card.value === 3) {
-        setDiscardPile([...discardPile, card]),
+        setDiscardPile([...discardPile, card])
         dealerCards.push.apply(dealerCards, playPile)
         setDealerCards(dealerCards)
         setPlayPile([])
       } else if (card.value === 10) {
-        discardPile.push.apply(discardPile, playPile),
-        setDiscardPile(discardPile),
+        discardPile.push.apply(discardPile, playPile)
+        setDiscardPile(discardPile)
         setPlayPile([])
       } else setPlayPile([...playPile, card])
-    } else alert('cant play that')
+    } else if (!checkLogic(card) && pile === 'hand') {
+      alert('cant play that')
+    } else if (checkLogic(card) && pile === 'shown') {
+      let updatedHand = playerDownShownCards.filter((playerCard) => playerCard.display != card.display)
+      setPlayerDownShownCards(updatedHand)
+      if (card.value === 3) {
+        setDiscardPile([...discardPile, card])
+        dealerCards.push.apply(dealerCards, playPile)
+        setDealerCards(dealerCards)
+        setPlayPile([])
+      } else if (card.value === 10) {
+        discardPile.push.apply(discardPile, playPile)
+        setDiscardPile(discardPile)
+        setPlayPile([])
+      } else setPlayPile([...playPile, card])
+    } else if (!checkLogic(card) && pile === 'shown') {
+      alert('cant play that')
+    } else if (pile === 'hidden') {
+      checkLogicHidden(card)
+    }
+
   }
 
   function drawCardButton() {
@@ -711,6 +731,38 @@ function App() {
     setPlayPile([])
   }
 
+  // logic for selected hidden card
+  function checkLogicHidden(card) {
+    if (playPile.length === 0) {
+      let updatedHand = playerDownHiddenCards.filter((playerCard) => playerCard.display != card.display)
+      setPlayerDownHiddenCards(updatedHand)
+      setPlayPile([...playPile, card])
+    } else if (card.value === 2 || card.value === 3 || card.value === 10) {
+      let updatedHand = playerDownHiddenCards.filter((playerCard) => playerCard.display != card.display)
+      setPlayerDownHiddenCards(updatedHand)
+      setPlayPile([...playPile, card])
+    } else if (playPile[playPile.length - 1].value === 7 && card.value <= 7) {
+      let updatedHand = playerDownHiddenCards.filter((playerCard) => playerCard.display != card.display)
+      setPlayerDownHiddenCards(updatedHand)
+      setPlayPile([...playPile, card])
+    } else if (playPile[playPile.length - 1].value === 7 && card.value > 7) {
+      let updatedHand = playerDownHiddenCards.filter((playerCard) => playerCard.display != card.display)
+      setPlayerDownHiddenCards(updatedHand)
+      setPlayerCards([...playPile, card])
+      setPlayPile([])
+    } else if (playPile[playPile.length - 1].value <= card.value) {
+      let updatedHand = playerDownHiddenCards.filter((playerCard) => playerCard.display != card.display)
+      setPlayerDownHiddenCards(updatedHand)
+      setPlayPile([...playPile, card])
+    } else {
+      let updatedHand = playerDownHiddenCards.filter((playerCard) => playerCard.display != card.display)
+      setPlayerDownHiddenCards(updatedHand)
+      setPlayerCards([...playPile, card])
+      setPlayPile([])
+    }
+  }
+
+  // logic for selected card
   function checkLogic(card) {
     if (playPile.length === 0) {
       return true
@@ -727,7 +779,7 @@ function App() {
 
   // need function to check if 4 in a row in play pile
   // automotically play multiple of same card from hand??
-  // end game logic
+  // end game logic - function to check if someone has won
   // swap cards at begining
   // have computer be able to swap cards 
   // ability to 3 computer back
@@ -735,13 +787,19 @@ function App() {
   return (
     <div>
       <button onClick={newGame}>New Game</button>
-      {/* <button onClick={viewDeck}>View Deck</button> */}
+      <button onClick={viewDeck}>View Deck</button>
       {/* <button onClick={drawCardButton}>Draw Card</button> */}
       <button onClick={pickUp}>Pick Up</button>
       <br />
       <br />
       <button onClick={dealerPlay}>Dealer Play</button>
 
+
+      <div><h4>Draw Pile:</h4>
+        {drawDeck && drawDeck.map((card) => (
+          <img style={{ height: 18, width: 12, padding: 1 }} src={card.back_img} />
+        ))}
+      </div>
       <div><h4>Discard and Play Pile:</h4>
         {discardPile && discardPile.map((card) => (
           <img style={{ height: 45, width: 30, padding: 1 }} src={card.back_img} />
@@ -760,12 +818,23 @@ function App() {
         ))}
       </div>
       <div><h4>Player down: <button onClick={() => setHidden(!hidden)}>Hide/Show</button></h4>
-        {hidden && playerDownHiddenCards && playerDownHiddenCards.map((card) => (<img style={{ height: 90, width: 60, padding: 5 }} src={card.back_img} />))}
-        {hidden && playerDownShownCards && playerDownShownCards.map((card) => (<img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
+        {hidden &&
+          <>
+            {playerDownHiddenCards && playerDownShownCards.length > 0 ?
+              playerDownHiddenCards.map((card) => (<img style={{ height: 90, width: 60, padding: 5 }} src={card.back_img} />))
+              :
+              playerDownHiddenCards.map((card) => (<img onClick={() => playCard(card, 'hidden')} style={{ height: 90, width: 60, padding: 5 }} src={card.back_img} />))}
+
+            {playerDownShownCards && playerCards.length > 0 ?
+              playerDownShownCards.map((card) => (<img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))
+              :
+              playerDownShownCards.map((card) => (<img onClick={() => playCard(card, 'shown')} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
+          </>
+        }
       </div>
       <div><h4>Player hand:</h4>
         {playerCards && playerCards.map((card) => (
-          <img onClick={() => playCard(card)} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />
+          <img onClick={() => playCard(card, 'hand')} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />
         ))}
       </div>
     </div>

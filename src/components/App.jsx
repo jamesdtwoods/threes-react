@@ -862,10 +862,10 @@ function App() {
           <Modal.Title>Click to swap cards</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div class="bg-success"><h4>Player Down:</h4>
+          <div className="bg-success"><h4>Player Down:</h4>
             {playerDownShownCards.map((card) => (<img onClick={() => sendCardToHandFromDown(card)} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
           </div>
-          <div class="bg-success"><h4>Player hand:</h4>
+          <div className="bg-success"><h4>Player hand:</h4>
             {playerCards && playerCards.map((card) => (<img onClick={() => sendCardToDownFromHand(card)} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
           </div>
         </Modal.Body>

@@ -478,6 +478,7 @@ function App() {
     }
   ]
   let gamesStarted = false;
+  let turn = 0;
   let gameOver = false;
   let playerWon = false;
   let [dealerCards, setDealerCards] = useState([])
@@ -523,6 +524,7 @@ function App() {
 
   function newGame() {
     // need a way to reset deck
+    gamesStarted = true;
     setDealerDownHiddenCards([])
     setDealerDownShownCards([])
     setDealerCards([])
@@ -550,7 +552,7 @@ function App() {
   }
 
   function playCard(card, pile) {
-    gamesStarted = true;
+    turn++;
     playerCards.sort((a, b) => a.value - b.value)
     if (checkLogic(card) && pile === 'hand') {
       let updatedHand = playerCards.filter((playerCard) => playerCard.display != card.display)
@@ -779,7 +781,8 @@ function App() {
 
   // need function to check if 4 in a row in play pile
   // automotically play multiple of same card from hand??
-  // end game logic - function to check if someone has won
+  // end game logic - 
+  //   function to increment turn and check if someone has won - this will allow swapping cards 
   // swap cards at begining
   // have computer be able to swap cards 
   // ability to 3 computer back
@@ -817,7 +820,7 @@ function App() {
           <img style={{ height: 90, width: 60, padding: 5 }} src={card.back_img} />
         ))}
       </div>
-      <div><h4>Player down: <button onClick={() => setHidden(!hidden)}>Hide/Show</button></h4>
+      <div><h4>Player down: <button onClick={() => setHidden(!hidden)}>Hide/Show</button> {turn === 0 && <button onClick={() => setHidden(!hidden)}>Swap</button>}</h4>
         {hidden &&
           <>
             {playerDownHiddenCards && playerDownShownCards.length > 0 ?

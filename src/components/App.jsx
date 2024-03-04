@@ -480,7 +480,8 @@ function App() {
       back_img: 'cardPictures/back_of_card.png'
     }
   ]
-  let gamesStarted = false;
+  const [gamesStarted, setGameStarted] = useState(false);
+  const [turn, setTurn] = useState(0);
   const [swap, setSwap] = useState(false);
   let gameOver = false;
   let playerWon = false;
@@ -533,7 +534,8 @@ function App() {
 
   function newGame() {
     // need a way to reset deck
-    gamesStarted = true;
+    setGameStarted(true)
+    setTurn(1)
     setSwap(true)
     setDealerDownHiddenCards([])
     setDealerDownShownCards([])
@@ -548,7 +550,23 @@ function App() {
     setPlayerDownHiddenCards([getNextCard('playerDownHidden'), getNextCard('playerDownHidden'), getNextCard('playerDownHidden')]);
     setPlayerDownShownCards([getNextCard('playerDownShown'), getNextCard('playerDownShown'), getNextCard('playerDownShown')]);
     setPlayerCards([getNextCard('playerHand'), getNextCard('playerHand'), getNextCard('playerHand')]);
+    endOfTurn()
   }
+
+  // should be .then on newGame()
+  // function dealerSwap() {
+  //   let sortedHand = dealerCards.sort((a, b) => a.value - b.value)
+  //   let sortedShown = dealerDownShownCards.sort((a, b) => a.value - b.value)
+  //   for (let i = 0; i < sortedHand.length; i++) {
+  //     if (sortedHand[i].value === 2 || sortedHand[i].value === 3 || sortedHand[i].value === 10) {
+  //       sortedShown.push(sortedHand[i])
+  //       sortedHand.filter((card) => card.value != sortedHand[i].value)
+  //     }
+  //   }
+  //   console.log('hand', sortedHand);
+  //   console.log('shown', sortedShown);
+
+  // }
 
   function viewDeck() {
     console.log('deck of cards', deckOfCards);
@@ -596,7 +614,7 @@ function App() {
         setPlayPile([])
       } else if (card.value === 10) {
         discardPile.push.apply(discardPile, playPile)
-        setDiscardPile(discardPile)
+        setDiscardPile([...discardPile, card])
         setPlayPile([])
       } else setPlayPile([...playPile, card])
     } else if (!checkLogic(card) && pile === 'shown') {
@@ -642,6 +660,7 @@ function App() {
         setPlayPile([])
       }
     }
+    endOfTurn()
   }
 
   function drawCardButton() {
@@ -659,7 +678,16 @@ function App() {
 
   // returns a valid card object if dealer has cards to play, otherwise returns undefined
   function checkDealerCard() {
+    dealerCards.sort((a, b) => a.value - b.value)
+    dealerDownShownCards.sort((a, b) => a.value - b.value)
+    dealerDownHiddenCards.sort((a, b) => a.value - b.value)
     let cardToPlay;
+    if (dealerCards.length === 0 && dealerDownShownCards.length === 0){
+      //play down hidden cards
+    }
+    if (dealerCards.length === 0 && dealerDownShownCards.length>0){
+      //play down shown cards
+    }
     if (playPile.length === 0) {
       // loop over to find the best card to play??
       for (let i = 0; i < dealerCards.length; i++) {
@@ -703,7 +731,7 @@ function App() {
       }
     }
     for (let i = 0; i < dealerCards.length; i++) {
-      if (dealerCards[i].value > playPile[playPile.length - 1].value) {
+      if (dealerCards[i].value > playPile[playPile.length - 1].value && dealerCards[i].value != 3 && dealerCards[i].value != 10) {
         cardToPlay = dealerCards[i]
         return cardToPlay
       }
@@ -718,86 +746,119 @@ function App() {
   }
 
   // there's a bug for dealer playing on a 7
+  // update to not draw if no cards left to draw
+  // should be .then on playCard()
   function dealerPlay() {
     dealerCards.sort((a, b) => a.value - b.value)
     let cardToPlay = checkDealerCard()
     // if cardToPlay is defined, play the card, else draw
     if (cardToPlay) {
       let updatedHand = dealerCards.filter((dealerCard) => dealerCard.display != cardToPlay.display)
-      if (cardToPlay.value === 3) {
-        let player3 = playerCards.filter((card) => card.value === 3);
-        if (player3[0]) {
-          return (
-            handleShow3(),
-            setDiscardPile([...discardPile, cardToPlay]),
-            setDealerCards([...updatedHand, getNextCard('dealerHand')])
-          )
-          // return (
-          // <Modal show={show3} onHide={handleClose3} animation={false}>
-          //   <Modal.Header closeButton>
-          //     <Modal.Title></Modal.Title>
-          //   </Modal.Header>
-          //   <Modal.Body>
-          //     You got three'd, Click on your 3 to three them back!
-          //     <div>
-          //       <img onClick={() => playCard(player3[0], 'hand')} style={{ height: 90, width: 60, padding: 5 }} src={player3[0].front_img} />
-          //     </div>
-          //   </Modal.Body>
-          //   <Modal.Footer>
-          //     <Button variant="light" onClick={handleClose3}>
-          //       No?
-          //     </Button>
-          //   </Modal.Footer>
-          // </Modal>
-          // )
-        } else {
+      if (drawDeck.length > 0) {
+        if (cardToPlay.value === 3) {
+          let player3 = playerCards.filter((card) => card.value === 3);
+          if (player3[0]) {
+            return (
+              handleShow3(),
+              setDiscardPile([...discardPile, cardToPlay]),
+              setDealerCards([...updatedHand, getNextCard('dealerHand')]),
+              endOfTurn()
+            )
+          } else {
+            if (updatedHand.length < 3) {
+              return (
+                playerCards.push.apply(playerCards, playPile),
+                setPlayerCards(playerCards),
+                setPlayPile([]),
+                setDiscardPile([...discardPile, cardToPlay]),
+                setDealerCards([...updatedHand, getNextCard('dealerHand')]),
+                endOfTurn()
+              )
+            } else return (
+              playerCards.push.apply(playerCards, playPile),
+              setPlayerCards(playerCards),
+              setPlayPile([]),
+              setDealerCards(updatedHand),
+              endOfTurn()
+            )
+          }
+        }
+        if (cardToPlay.value === 10) {
           if (updatedHand.length < 3) {
+            return (
+              discardPile.push.apply(discardPile, playPile),
+              setDiscardPile(discardPile),
+              setPlayPile([]),
+              setDealerCards([...updatedHand, getNextCard('dealerHand')]),
+              endOfTurn(),
+              alert('dealer played 10, hit dealer play again')
+            )
+          } else return (
+            discardPile.push.apply(discardPile, playPile),
+            setDiscardPile(discardPile),
+            setPlayPile([]),
+            setDealerCards(updatedHand),
+            endOfTurn(),
+            alert('dealer played 10, hit dealer play again')
+          )
+        }
+        if (updatedHand.length < 3) {
+          return (
+            setPlayPile([...playPile, cardToPlay]),
+            setDealerCards([...updatedHand, getNextCard('dealerHand')]),
+            endOfTurn()
+          )
+        } else return (
+          setPlayPile([...playPile, cardToPlay]),
+          setDealerCards(updatedHand),
+          endOfTurn()
+        )
+      } else if (drawDeck.length === 0) {
+        if (cardToPlay.value === 3) {
+          let player3 = playerCards.filter((card) => card.value === 3);
+          if (player3[0]) {
+            return (
+              handleShow3(),
+              setDiscardPile([...discardPile, cardToPlay]),
+              setDealerCards(updatedHand),
+              endOfTurn()
+            )
+          } else {
             return (
               playerCards.push.apply(playerCards, playPile),
               setPlayerCards(playerCards),
               setPlayPile([]),
               setDiscardPile([...discardPile, cardToPlay]),
-              setDealerCards([...updatedHand, getNextCard('dealerHand')])
+              setDealerCards(updatedHand),
+              endOfTurn()
             )
-          } else return (
-            playerCards.push.apply(playerCards, playPile),
-            setPlayerCards(playerCards),
-            setPlayPile([]),
-            setDealerCards(updatedHand)
-          )
+          }
         }
-      }
-      if (cardToPlay.value === 10) {
-        if (updatedHand.length < 3) {
+        if (cardToPlay.value === 10) {
           return (
             discardPile.push.apply(discardPile, playPile),
             setDiscardPile(discardPile),
             setPlayPile([]),
-            setDealerCards([...updatedHand, getNextCard('dealerHand')]),
+            setDealerCards(updatedHand),
+            endOfTurn(),
             alert('dealer played 10, hit dealer play again')
           )
-        } else return (
-          discardPile.push.apply(discardPile, playPile),
-          setDiscardPile(discardPile),
-          setPlayPile([]),
-          setDealerCards(updatedHand),
-          alert('dealer played 10, hit dealer play again')
-        )
+        }
+        if (updatedHand.length < 3) {
+          return (
+            setPlayPile([...playPile, cardToPlay]),
+            setDealerCards(updatedHand),
+            endOfTurn()
+          )
+        }
       }
-      if (updatedHand.length < 3) {
-        return (
-          setPlayPile([...playPile, cardToPlay]),
-          setDealerCards([...updatedHand, getNextCard('dealerHand')])
-        )
-      } else return (
-        setPlayPile([...playPile, cardToPlay]),
-        setDealerCards(updatedHand)
-      )
     } else dealerCards.push.apply(dealerCards, playPile)
     setDealerCards(dealerCards)
     setPlayPile([])
+    endOfTurn()
   }
 
+  // should have dealer play next automatically?
   function pickUp() {
     playerCards.push.apply(playerCards, playPile)
     setPlayerCards(playerCards)
@@ -808,18 +869,39 @@ function App() {
     dealerCards.push.apply(dealerCards, playPile)
     setDealerCards(dealerCards)
     setPlayPile([])
+    endOfTurn()
   }
 
   // logic for selected hidden card
   function checkLogicHidden(card) {
-    if (playPile.length === 0) {
+    if (playPile.length === 0 && card.value === 3) {
+      let updatedHand = playerDownHiddenCards.filter((playerCard) => playerCard.display != card.display)
+      setPlayerDownHiddenCards(updatedHand)
+      setDiscardPile([...discardPile, card])
+      alert('You threed the computer, but there was nothing to pick up, dealers turn!')
+    } else if (playPile.length === 0 && card.value === 10) {
+      let updatedHand = playerDownHiddenCards.filter((playerCard) => playerCard.display != card.display)
+      setPlayerDownHiddenCards(updatedHand)
+      setDiscardPile([...discardPile, card])
+      alert('You cleared the pile, play again')
+    } else if (playPile.length === 0) {
       let updatedHand = playerDownHiddenCards.filter((playerCard) => playerCard.display != card.display)
       setPlayerDownHiddenCards(updatedHand)
       setPlayPile([...playPile, card])
-    } else if (card.value === 2 || card.value === 3 || card.value === 10) {
+    }
+    if (card.value === 3) {
       let updatedHand = playerDownHiddenCards.filter((playerCard) => playerCard.display != card.display)
       setPlayerDownHiddenCards(updatedHand)
-      setPlayPile([...playPile, card])
+      setDiscardPile([...discardPile, card])
+      dealerCards.push.apply(dealerCards, playPile)
+      setDealerCards(dealerCards)
+      setPlayPile([])
+    } else if (card.value === 10) {
+      let updatedHand = playerDownHiddenCards.filter((playerCard) => playerCard.display != card.display)
+      setPlayerDownHiddenCards(updatedHand)
+      discardPile.push.apply(discardPile, playPile)
+      setDiscardPile([...discardPile, card])
+      setPlayPile([])
     } else if (playPile[playPile.length - 1].value === 7 && card.value <= 7) {
       let updatedHand = playerDownHiddenCards.filter((playerCard) => playerCard.display != card.display)
       setPlayerDownHiddenCards(updatedHand)
@@ -829,7 +911,7 @@ function App() {
       setPlayerDownHiddenCards(updatedHand)
       setPlayerCards([...playPile, card])
       setPlayPile([])
-    } else if (playPile[playPile.length - 1].value <= card.value) {
+    } else if (playPile[playPile.length - 1].value <= card.value || card.value === 2) {
       let updatedHand = playerDownHiddenCards.filter((playerCard) => playerCard.display != card.display)
       setPlayerDownHiddenCards(updatedHand)
       setPlayPile([...playPile, card])
@@ -856,16 +938,31 @@ function App() {
     } else return false
   }
 
-  function sendCardToHandFromDown(card) {
-    let updatedHand = playerDownShownCards.filter((playerCard) => playerCard.display != card.display)
-    setPlayerDownShownCards(updatedHand)
-    setPlayerCards([...playerCards, card])
+  function sendCardToHandFromDown(card, player) {
+    if (player === 'player') {
+      let updatedHand = playerDownShownCards.filter((playerCard) => playerCard.display != card.display)
+      setPlayerDownShownCards(updatedHand)
+      setPlayerCards([...playerCards, card])
+    }
+    if (player === 'dealer') {
+      let updatedDealerHand = dealerDownShownCards.filter((dealerCard) => dealerCard.display != card.display)
+      setDealerDownShownCards(updatedDealerHand)
+      setDealerCards([...dealerCards, card])
+    }
+
   }
 
-  function sendCardToDownFromHand(card) {
-    let updatedHand = playerCards.filter((playerCard) => playerCard.display != card.display)
-    setPlayerCards(updatedHand)
-    setPlayerDownShownCards([...playerDownShownCards, card])
+  function sendCardToDownFromHand(card, player) {
+    if (player === 'player') {
+      let updatedHand = playerCards.filter((playerCard) => playerCard.display != card.display)
+      setPlayerCards(updatedHand)
+      setPlayerDownShownCards([...playerDownShownCards, card])
+    }
+    if (player === 'dealer') {
+      let updatedDealerHand = dealerCards.filter((dealerCard) => dealerCard.display != card.display)
+      setDealerCards(updatedDealerHand)
+      setDealerDownShownCards([...dealerDownShownCards, card])
+    }
   }
 
   function clickModal(card) {
@@ -873,12 +970,50 @@ function App() {
     handleClose3();
   }
 
+  function endOfTurn() {
+    // console.log('in end of turn');
+    if (playerCards.length>0){
+      playerCards.sort((a, b) => a.value - b.value)
+    }
+    // if (playPile.length > 3) {
+    //   console.log('checking for 4');
+    //   let card1 = playPile.pop()
+    //   let card2 = playPile.pop()
+    //   let card3 = playPile.pop()
+    //   let card4 = playPile.pop()
+    //   console.log('card1:', card1)
+    //   console.log('card2:', card2)
+    //   console.log('card3:', card3)
+    //   console.log('card4:', card4)
+    //   if (card1.value === card2.value === card3.value === card4.value) {
+    //     console.log('in 4 in a row! playpile:', playPile);
+    //     console.log('card1:', card1)
+    //     console.log('card2:', card2)
+    //     console.log('card3:', card3)
+    //     console.log('card4:', card4)
+    //     console.log('spliced:', playPile.splice(-4));
+    //     setPlayPile(playPile.splice(-4))
+    //     alert('4 in a row. go again!')
+    //   }
+    // }
+    // increments turn
+    setTurn(turn + 1)
+    // checks to see if 4 in a row in play pile
+    // checks to see if someone won
+    if (gamesStarted && dealerCards.length === 0 && dealerDownShownCards.length === 0 && dealerDownHiddenCards.length === 0) {
+      alert('dealer wins')
+    }
+    if (gamesStarted && playerCards.length === 0 && playerDownShownCards.length === 0 && playerDownHiddenCards.length === 0) {
+      alert('You win')
+    }
+  }
+
   // automotically play multiple of same card from hand??
   // end game logic - 
   //   function to increment turn and check if someone has won 
 
-  // have computer be able to swap cards 
-  // ability to 3 computer back -> modal?
+  // have computer be able to 3 me back
+  // alert for computer 3ing me
 
   // end of turn function
   // increments turn
@@ -889,11 +1024,11 @@ function App() {
     <div>
       <Button variant="light" onClick={newGame}>New Game</Button>
       <Button variant="light" onClick={viewDeck}>View Deck</Button>
-      {/* <Button variant="light" onClick={drawCardButton}>Draw Card</Button> */}
+      {/* <Button variant="light" onClick={dealerSwap}>Dealer Swap</Button> */}
       <Button variant="light" onClick={pickUp}>Pick Up</Button>
       <br />
       <br />
-      <Button variant="light" onClick={dealerPlay}>Dealer Play</Button>
+
       <div><h4>Draw Pile:</h4>
         {drawDeck && drawDeck.map((card) => (
           <img style={{ height: 18, width: 12, padding: 1 }} src={card.back_img} />
@@ -908,7 +1043,7 @@ function App() {
           <img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />
         ))}
       </div>
-      <div><h4>Dealer Cards: <Button variant="light" onClick={() => setHidden(!hidden)}>Hide/Show</Button></h4>
+      <div><h4>Dealer Cards: <Button variant="light" onClick={() => setHidden(!hidden)}>Hide/Show</Button> {swap ? <Button variant="light" onClick={handleShow}>Swap</Button> : <></>}</h4>
         {hidden && dealerDownHiddenCards && dealerDownHiddenCards.map((card) => (<img style={{ height: 90, width: 60, padding: 5 }} src={card.back_img} />))}
         {hidden && dealerDownShownCards && dealerDownShownCards.map((card) => (<img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
         <br />
@@ -931,7 +1066,7 @@ function App() {
           </>
         }
       </div>
-      <div><h4>Player hand:</h4>
+      <div><h4>Player hand: <Button onClick={dealerPlay}>Dealer Play</Button></h4>
         {playerCards && playerCards.map((card) => (
           <img onClick={() => playCard(card, 'hand')} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />
         ))}
@@ -941,12 +1076,34 @@ function App() {
           <Modal.Title>Click to swap cards</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="bg-success"><h4>Player Down:</h4>
-            {playerDownShownCards.map((card) => (<img onClick={() => sendCardToHandFromDown(card)} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
-          </div>
-          <div className="bg-success"><h4>Player hand:</h4>
-            {playerCards && playerCards.map((card) => (<img onClick={() => sendCardToDownFromHand(card)} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
-          </div>
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <div className="bg-success"><h4>Player Down:</h4>
+                    {playerDownShownCards.map((card) => (<img onClick={() => sendCardToHandFromDown(card, 'player')} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
+                  </div>
+                </td>
+                <td>
+                  <div className="bg-success"><h4>Dealer Down:</h4>
+                    {dealerDownShownCards.map((card) => (<img onClick={() => sendCardToHandFromDown(card, 'dealer')} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="bg-success"><h4>Player hand:</h4>
+                    {playerCards && playerCards.map((card) => (<img onClick={() => sendCardToDownFromHand(card, 'player')} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
+                  </div>
+                </td>
+                <td>
+                  <div className="bg-success"><h4>Dealer hand:</h4>
+                    {dealerCards && dealerCards.map((card) => (<img onClick={() => sendCardToDownFromHand(card, 'dealer')} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="light" onClick={handleClose}>

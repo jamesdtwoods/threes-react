@@ -495,9 +495,11 @@ function App() {
   const [discardPile, setDiscardPile] = useState([])
   const [hidden, setHidden] = useState(true)
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const [show3, setShow3] = useState(false);
+  const handleClose3 = () => setShow3(false);
+  const handleShow3 = () => setShow3(true);
 
   // shuffleDeck(deckOfCards)
 
@@ -601,6 +603,44 @@ function App() {
       alert('cant play that')
     } else if (pile === 'hidden') {
       checkLogicHidden(card)
+    } else if (pile === '3modal') {
+      dealerCards.sort((a, b) => a.value - b.value)
+      let cardToPlay = checkDealerCard()
+      // if cardToPlay is defined, play the card, else draw
+      if (cardToPlay) {
+        let updatedHand = dealerCards.filter((dealerCard) => dealerCard.display != cardToPlay.display)
+        if (cardToPlay.value === 3) {
+          if (updatedHand.length < 3) {
+            return (
+              playerCards.push.apply(playerCards, playPile),
+              setPlayerCards(playerCards),
+              setPlayPile([]),
+              setDiscardPile([...discardPile, cardToPlay]),
+              setDealerCards([...updatedHand, getNextCard('dealerHand')])
+            )
+          } else return (
+            playerCards.push.apply(playerCards, playPile),
+            setPlayerCards(playerCards),
+            setPlayPile([]),
+            setDealerCards(updatedHand)
+          )
+        }
+      }
+      let updatedPlayerHand = playerCards.filter((playerCard) => playerCard.display != card.display)
+      if (updatedPlayerHand.length < 3 && drawDeck.length > 0) {
+        setPlayerCards([...updatedPlayerHand, getNextCard('playerHand')])
+      } else if (updatedPlayerHand.length < 3 && drawDeck.length === 0) {
+        setPlayerCards(updatedPlayerHand)
+      }
+      if (updatedPlayerHand.length >= 3) {
+        setPlayerCards(updatedPlayerHand)
+      }
+      if (card.value === 3) {
+        setDiscardPile([...discardPile, card])
+        dealerCards.push.apply(dealerCards, playPile)
+        setDealerCards(dealerCards)
+        setPlayPile([])
+      }
     }
   }
 
@@ -677,6 +717,7 @@ function App() {
     return cardToPlay
   }
 
+  // there's a bug for dealer playing on a 7
   function dealerPlay() {
     dealerCards.sort((a, b) => a.value - b.value)
     let cardToPlay = checkDealerCard()
@@ -684,20 +725,47 @@ function App() {
     if (cardToPlay) {
       let updatedHand = dealerCards.filter((dealerCard) => dealerCard.display != cardToPlay.display)
       if (cardToPlay.value === 3) {
-        if (updatedHand.length < 3) {
+        let player3 = playerCards.filter((card) => card.value === 3);
+        if (player3[0]) {
           return (
-            playerCards.push.apply(playerCards, playPile),
-            setPlayerCards(playerCards),
-            setPlayPile([]),
+            handleShow3(),
             setDiscardPile([...discardPile, cardToPlay]),
             setDealerCards([...updatedHand, getNextCard('dealerHand')])
           )
-        } else return (
-          playerCards.push.apply(playerCards, playPile),
-          setPlayerCards(playerCards),
-          setPlayPile([]),
-          setDealerCards(updatedHand)
-        )
+          // return (
+          // <Modal show={show3} onHide={handleClose3} animation={false}>
+          //   <Modal.Header closeButton>
+          //     <Modal.Title></Modal.Title>
+          //   </Modal.Header>
+          //   <Modal.Body>
+          //     You got three'd, Click on your 3 to three them back!
+          //     <div>
+          //       <img onClick={() => playCard(player3[0], 'hand')} style={{ height: 90, width: 60, padding: 5 }} src={player3[0].front_img} />
+          //     </div>
+          //   </Modal.Body>
+          //   <Modal.Footer>
+          //     <Button variant="light" onClick={handleClose3}>
+          //       No?
+          //     </Button>
+          //   </Modal.Footer>
+          // </Modal>
+          // )
+        } else {
+          if (updatedHand.length < 3) {
+            return (
+              playerCards.push.apply(playerCards, playPile),
+              setPlayerCards(playerCards),
+              setPlayPile([]),
+              setDiscardPile([...discardPile, cardToPlay]),
+              setDealerCards([...updatedHand, getNextCard('dealerHand')])
+            )
+          } else return (
+            playerCards.push.apply(playerCards, playPile),
+            setPlayerCards(playerCards),
+            setPlayPile([]),
+            setDealerCards(updatedHand)
+          )
+        }
       }
       if (cardToPlay.value === 10) {
         if (updatedHand.length < 3) {
@@ -705,13 +773,15 @@ function App() {
             discardPile.push.apply(discardPile, playPile),
             setDiscardPile(discardPile),
             setPlayPile([]),
-            setDealerCards([...updatedHand, getNextCard('dealerHand')])
+            setDealerCards([...updatedHand, getNextCard('dealerHand')]),
+            alert('dealer played 10, hit dealer play again')
           )
         } else return (
           discardPile.push.apply(discardPile, playPile),
           setDiscardPile(discardPile),
           setPlayPile([]),
-          setDealerCards(updatedHand)
+          setDealerCards(updatedHand),
+          alert('dealer played 10, hit dealer play again')
         )
       }
       if (updatedHand.length < 3) {
@@ -798,13 +868,22 @@ function App() {
     setPlayerDownShownCards([...playerDownShownCards, card])
   }
 
-  // need function to check if 4 in a row in play pile
+  function clickModal(card) {
+    playCard(card, '3modal');
+    handleClose3();
+  }
+
   // automotically play multiple of same card from hand??
   // end game logic - 
-  //   function to increment turn and check if someone has won - this will allow swapping cards 
-  // swap cards at begining
+  //   function to increment turn and check if someone has won 
+
   // have computer be able to swap cards 
-  // ability to 3 computer back
+  // ability to 3 computer back -> modal?
+
+  // end of turn function
+  // increments turn
+  // checks to see if 4 in a row in play pile
+  // checks to see if someone won
 
   return (
     <div>
@@ -834,7 +913,7 @@ function App() {
         {hidden && dealerDownShownCards && dealerDownShownCards.map((card) => (<img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
         <br />
         {dealerCards && dealerCards.map((card) => (
-          <img style={{ height: 90, width: 60, padding: 5 }} src={card.back_img} />
+          <img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />
         ))}
       </div>
       <div><h4>Player down: <Button variant="light" onClick={() => setHidden(!hidden)}>Hide/Show</Button> {swap ? <Button variant="light" onClick={handleShow}>Swap</Button> : <></>}</h4>
@@ -857,7 +936,7 @@ function App() {
           <img onClick={() => playCard(card, 'hand')} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />
         ))}
       </div>
-      <Modal  show={show} onHide={handleClose} animation={false}>
+      <Modal show={show} onHide={handleClose} animation={false}>
         <Modal.Header closeButton>
           <Modal.Title>Click to swap cards</Modal.Title>
         </Modal.Header>
@@ -872,6 +951,22 @@ function App() {
         <Modal.Footer>
           <Button variant="light" onClick={handleClose}>
             Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal show={show3} onHide={handleClose3} animation={false}>
+        <Modal.Header closeButton>
+          <Modal.Title></Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          You got three'd, Click on your 3 to three them back!
+          <div className="bg-success"><h4>Player hand:</h4>
+            {playerCards.filter((card) => card.value === 3).map((card) => (<img onClick={() => clickModal(card)} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="light" onClick={handleClose3}>
+            No?
           </Button>
         </Modal.Footer>
       </Modal>

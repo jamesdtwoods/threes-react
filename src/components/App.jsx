@@ -1047,44 +1047,44 @@ function App() {
 
       <div><h4>Draw Pile:</h4>
         {drawDeck && drawDeck.map((card) => (
-          <img style={{ height: 18, width: 12, padding: 1 }} src={card.back_img} />
+          <img key={card.display} style={{ height: 18, width: 12, padding: 1 }} src={card.back_img} />
         ))}
       </div>
       <div><h4>Discard and Play Pile:</h4>
         {discardPile && discardPile.map((card) => (
-          <img style={{ height: 45, width: 30, padding: 1 }} src={card.back_img} />
+          <img key={card.display} style={{ height: 45, width: 30, padding: 1 }} src={card.back_img} />
         ))}
         <br />
         {playPile && playPile.map((card) => (
-          <img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />
+          <img key={card.display} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />
         ))}
       </div>
       <div><h4>Dealer Cards: <Button variant="light" onClick={() => setHidden(!hidden)}>Hide/Show</Button> {swap ? <Button variant="light" onClick={handleShow}>Swap</Button> : <></>}</h4>
-        {hidden && dealerDownHiddenCards && dealerDownHiddenCards.map((card) => (<img style={{ height: 90, width: 60, padding: 5 }} src={card.back_img} />))}
-        {hidden && dealerDownShownCards && dealerDownShownCards.map((card) => (<img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
+        {hidden && dealerDownHiddenCards && dealerDownHiddenCards.map((card) => (<img key={card.display} style={{ height: 90, width: 60, padding: 5 }} src={card.back_img} />))}
+        {hidden && dealerDownShownCards && dealerDownShownCards.map((card) => (<img key={card.display} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
         <br />
         {dealerCards && dealerCards.map((card) => (
-          <img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />
+          <img key={card.display} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />
         ))}
       </div>
       <div><h4>Player down: <Button variant="light" onClick={() => setHidden(!hidden)}>Hide/Show</Button> {swap ? <Button variant="light" onClick={handleShow}>Swap</Button> : <></>}</h4>
         {hidden &&
           <>
             {playerDownHiddenCards && playerDownShownCards.length > 0 ?
-              playerDownHiddenCards.map((card) => (<img style={{ height: 90, width: 60, padding: 5 }} src={card.back_img} />))
+              playerDownHiddenCards.map((card) => (<img key={card.display} style={{ height: 90, width: 60, padding: 5 }} src={card.back_img} />))
               :
-              playerDownHiddenCards.map((card) => (<img onClick={() => playCard(card, 'hidden')} style={{ height: 90, width: 60, padding: 5 }} src={card.back_img} />))}
+              playerDownHiddenCards.map((card) => (<img key={card.display} onClick={() => playCard(card, 'hidden')} style={{ height: 90, width: 60, padding: 5 }} src={card.back_img} />))}
 
             {playerDownShownCards && playerCards.length > 0 ?
-              playerDownShownCards.map((card) => (<img style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))
+              playerDownShownCards.map((card) => (<img key={card.display} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))
               :
-              playerDownShownCards.map((card) => (<img onClick={() => playCard(card, 'shown')} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
+              playerDownShownCards.map((card) => (<img key={card.display} onClick={() => playCard(card, 'shown')} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
           </>
         }
       </div>
       <div><h4>Player hand: <Button onClick={dealerPlay}>Dealer Play</Button></h4>
         {playerCards && playerCards.map((card) => (
-          <img onClick={() => playCard(card, 'hand')} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />
+          <img key={card.display} onClick={() => playCard(card, 'hand')} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />
         ))}
       </div>
       <Modal show={show} onHide={handleClose} animation={false}>
@@ -1097,24 +1097,24 @@ function App() {
               <tr>
                 <td>
                   <div className="bg-success"><h4>Player Down:</h4>
-                    {playerDownShownCards.map((card) => (<img onClick={() => sendCardToHandFromDown(card, 'player')} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
+                    {playerDownShownCards.map((card) => (<img key={card.display} onClick={() => sendCardToHandFromDown(card, 'player')} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
                   </div>
                 </td>
                 <td>
                   <div className="bg-success"><h4>Dealer Down:</h4>
-                    {dealerDownShownCards.map((card) => (<img onClick={() => sendCardToHandFromDown(card, 'dealer')} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
+                    {dealerDownShownCards.map((card) => (<img key={card.display} onClick={() => sendCardToHandFromDown(card, 'dealer')} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
                   </div>
                 </td>
               </tr>
               <tr>
                 <td>
                   <div className="bg-success"><h4>Player hand:</h4>
-                    {playerCards && playerCards.map((card) => (<img onClick={() => sendCardToDownFromHand(card, 'player')} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
+                    {playerCards && playerCards.map((card) => (<img key={card.display} onClick={() => sendCardToDownFromHand(card, 'player')} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
                   </div>
                 </td>
                 <td>
                   <div className="bg-success"><h4>Dealer hand:</h4>
-                    {dealerCards && dealerCards.map((card) => (<img onClick={() => sendCardToDownFromHand(card, 'dealer')} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
+                    {dealerCards && dealerCards.map((card) => (<img key={card.display} onClick={() => sendCardToDownFromHand(card, 'dealer')} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
                   </div>
                 </td>
               </tr>
@@ -1134,7 +1134,7 @@ function App() {
         <Modal.Body>
           You got three'd, Click on your 3 to three them back!
           <div className="bg-success"><h4>Player hand:</h4>
-            {playerCards.filter((card) => card.value === 3).map((card) => (<img onClick={() => clickModal(card)} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
+            {playerCards.filter((card) => card.value === 3).map((card) => (<img key={card.display} onClick={() => clickModal(card)} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />))}
           </div>
         </Modal.Body>
         <Modal.Footer>

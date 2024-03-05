@@ -660,6 +660,7 @@ function App() {
         setPlayPile([])
       }
     }
+    checkForFour(card)
     endOfTurn()
   }
 
@@ -682,10 +683,10 @@ function App() {
     dealerDownShownCards.sort((a, b) => a.value - b.value)
     dealerDownHiddenCards.sort((a, b) => a.value - b.value)
     let cardToPlay;
-    if (dealerCards.length === 0 && dealerDownShownCards.length === 0){
+    if (dealerCards.length === 0 && dealerDownShownCards.length === 0) {
       //play down hidden cards
     }
-    if (dealerCards.length === 0 && dealerDownShownCards.length>0){
+    if (dealerCards.length === 0 && dealerDownShownCards.length > 0) {
       //play down shown cards
     }
     if (playPile.length === 0) {
@@ -806,11 +807,13 @@ function App() {
           return (
             setPlayPile([...playPile, cardToPlay]),
             setDealerCards([...updatedHand, getNextCard('dealerHand')]),
+            checkForFour(cardToPlay),
             endOfTurn()
           )
         } else return (
           setPlayPile([...playPile, cardToPlay]),
           setDealerCards(updatedHand),
+          checkForFour(cardToPlay),
           endOfTurn()
         )
       } else if (drawDeck.length === 0) {
@@ -848,6 +851,7 @@ function App() {
           return (
             setPlayPile([...playPile, cardToPlay]),
             setDealerCards(updatedHand),
+            checkForFour(cardToPlay),
             endOfTurn()
           )
         }
@@ -970,9 +974,21 @@ function App() {
     handleClose3();
   }
 
+  function checkForFour(card) {
+    if (playPile.length >= 3) {
+      let card1 = playPile.pop()
+      let card2 = playPile.pop()
+      let card3 = playPile.pop()
+      if (card.value === card1.value && card.value === card2.value && card.value === card3.value) {
+        setPlayPile(playPile)
+        alert('4 in a row. go again!')
+      }
+    }
+  }
+
   function endOfTurn() {
     // console.log('in end of turn');
-    if (playerCards.length>0){
+    if (playerCards.length > 0) {
       playerCards.sort((a, b) => a.value - b.value)
     }
     // if (playPile.length > 3) {

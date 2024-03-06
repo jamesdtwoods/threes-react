@@ -597,9 +597,10 @@ function App() {
         dealerCards.push.apply(dealerCards, playPile)
         setDealerCards(dealerCards)
         setPlayPile([])
+        alert('you threed the dealer, their go')
       } else if (card.value === 10) {
         discardPile.push.apply(discardPile, playPile)
-        setDiscardPile(discardPile)
+        setDiscardPile([...discardPile, card])
         setPlayPile([])
       } else setPlayPile([...playPile, card])
     } else if (!checkLogic(card) && pile === 'hand') {
@@ -611,6 +612,7 @@ function App() {
         setDiscardPile([...discardPile, card])
         dealerCards.push.apply(dealerCards, playPile)
         setDealerCards(dealerCards)
+        alert('you threed the dealer, their go')
         setPlayPile([])
       } else if (card.value === 10) {
         discardPile.push.apply(discardPile, playPile)
@@ -634,13 +636,15 @@ function App() {
               setPlayerCards(playerCards),
               setPlayPile([]),
               setDiscardPile([...discardPile, cardToPlay]),
-              setDealerCards([...updatedHand, getNextCard('dealerHand')])
+              setDealerCards([...updatedHand, getNextCard('dealerHand')]),
+              alert('you threed the dealer, their go')
             )
           } else return (
             playerCards.push.apply(playerCards, playPile),
             setPlayerCards(playerCards),
             setPlayPile([]),
-            setDealerCards(updatedHand)
+            setDealerCards(updatedHand),
+            alert('you threed the dealer, their go')
           )
         }
       }
@@ -658,6 +662,7 @@ function App() {
         dealerCards.push.apply(dealerCards, playPile)
         setDealerCards(dealerCards)
         setPlayPile([])
+        alert('you threed the dealer, their go')
       }
     }
     checkForFour(card)
@@ -722,7 +727,9 @@ function App() {
         if (dealerCards[i].value <= 7) {
           cardToPlay = dealerCards[i]
           return cardToPlay
-        } else dealerPickUp()
+        } 
+        // BUG HERE??????
+        else dealerPickUp()
       }
     }
     for (let i = 0; i < dealerCards.length; i++) {
@@ -747,7 +754,6 @@ function App() {
   }
 
   // there's a bug for dealer playing on a 7
-  // update to not draw if no cards left to draw
   // should be .then on playCard()
   function dealerPlay() {
     dealerCards.sort((a, b) => a.value - b.value)
@@ -773,6 +779,7 @@ function App() {
                 setPlayPile([]),
                 setDiscardPile([...discardPile, cardToPlay]),
                 setDealerCards([...updatedHand, getNextCard('dealerHand')]),
+                alert('you got threed, your go'),
                 endOfTurn()
               )
             } else return (
@@ -780,6 +787,7 @@ function App() {
               setPlayerCards(playerCards),
               setPlayPile([]),
               setDealerCards(updatedHand),
+              alert('you got threed, your go'),
               endOfTurn()
             )
           }
@@ -824,6 +832,7 @@ function App() {
               handleShow3(),
               setDiscardPile([...discardPile, cardToPlay]),
               setDealerCards(updatedHand),
+              alert('you got threed, your go'),
               endOfTurn()
             )
           } else {
@@ -833,6 +842,7 @@ function App() {
               setPlayPile([]),
               setDiscardPile([...discardPile, cardToPlay]),
               setDealerCards(updatedHand),
+              alert('you got threed, your go'),
               endOfTurn()
             )
           }
@@ -859,6 +869,7 @@ function App() {
     } else dealerCards.push.apply(dealerCards, playPile)
     setDealerCards(dealerCards)
     setPlayPile([])
+    alert('dealer had to pick up, your go')
     endOfTurn()
   }
 
@@ -867,12 +878,14 @@ function App() {
     playerCards.push.apply(playerCards, playPile)
     setPlayerCards(playerCards)
     setPlayPile([])
+    alert('dealer goes next')
   }
 
   function dealerPickUp() {
     dealerCards.push.apply(dealerCards, playPile)
     setDealerCards(dealerCards)
     setPlayPile([])
+    // alert('dealer had to pick up, your go')
     endOfTurn()
   }
 
@@ -1049,15 +1062,21 @@ function App() {
         {drawDeck && drawDeck.map((card) => (
           <img key={card.display} style={{ height: 18, width: 12, padding: 1 }} src={card.back_img} />
         ))}
+        {drawDeck.length}
       </div>
       <div><h4>Discard and Play Pile:</h4>
+      {/* discard pile: {discardPile.length} */}
         {discardPile && discardPile.map((card) => (
           <img key={card.display} style={{ height: 45, width: 30, padding: 1 }} src={card.back_img} />
         ))}
+        {discardPile.length}
         <br />
         {playPile && playPile.map((card) => (
-          <img key={card.display} style={{ height: 90, width: 60, padding: 5 }} src={card.front_img} />
+          <img key={card.display} style={{ height: 80, width: 4}} src={card.front_img} />
         ))}
+        {playPile[playPile.length - 1] && 
+          <img key={playPile[playPile.length - 1].display} style={{ height: 90, width: 60, padding: 5 }} src={playPile[playPile.length - 1].front_img} />
+        }
       </div>
       <div><h4>Dealer Cards: <Button variant="light" onClick={() => setHidden(!hidden)}>Hide/Show</Button> {swap ? <Button variant="light" onClick={handleShow}>Swap</Button> : <></>}</h4>
         {hidden && dealerDownHiddenCards && dealerDownHiddenCards.map((card) => (<img key={card.display} style={{ height: 90, width: 60, padding: 5 }} src={card.back_img} />))}

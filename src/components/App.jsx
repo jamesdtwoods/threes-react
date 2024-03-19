@@ -684,16 +684,144 @@ function App() {
 
   // returns a valid card object if dealer has cards to play, otherwise returns undefined
   function checkDealerCard() {
+
     dealerCards.sort((a, b) => a.value - b.value)
     dealerDownShownCards.sort((a, b) => a.value - b.value)
     dealerDownHiddenCards.sort((a, b) => a.value - b.value)
     let cardToPlay;
+    //play down hidden cards
     if (dealerCards.length === 0 && dealerDownShownCards.length === 0) {
-      //play down hidden cards
+      if (playPile.length === 0) {
+        for (let i = 0; i < dealerDownHiddenCards.length; i++) {
+          if (dealerDownHiddenCards[i].value != 2 && dealerDownHiddenCards[i].value != 3 && dealerDownHiddenCards[i].value != 10) {
+            cardToPlay = dealerDownHiddenCards[i]
+            return cardToPlay
+          }
+        }
+        for (let i = 0; i < dealerDownHiddenCards.length; i++) {
+          if (dealerDownHiddenCards[i].value = 2) {
+            cardToPlay = dealerDownHiddenCards[i]
+            return cardToPlay
+          }
+        }
+        for (let i = 0; i < dealerDownHiddenCards.length; i++) {
+          if (dealerDownHiddenCards[i].value = 10) {
+            cardToPlay = dealerDownHiddenCards[i]
+            return cardToPlay
+          }
+        }
+        for (let i = 0; i < dealerDownHiddenCards.length; i++) {
+          if (dealerDownHiddenCards[i].value = 3) {
+            cardToPlay = dealerDownHiddenCards[i]
+            return cardToPlay
+          }
+        }
+        return cardToPlay
+      }
+      if (playPile[playPile.length - 1].value === 7) {
+        for (let i = 0; i < dealerDownHiddenCards.length; i++) {
+          if (dealerDownHiddenCards[i].value <= 7 && dealerDownHiddenCards[i].value > 3) {
+            cardToPlay = dealerDownHiddenCards[i]
+            return cardToPlay
+          } else if (dealerDownHiddenCards[i].value === 2) {
+            cardToPlay = dealerDownHiddenCards[i]
+            return cardToPlay
+          } else if (dealerDownHiddenCards[i].value === 10) {
+            cardToPlay = dealerDownHiddenCards[i]
+            return cardToPlay
+          } else if (dealerDownHiddenCards[i].value === 3) {
+            cardToPlay = dealerDownHiddenCards[i]
+            return cardToPlay
+          }
+        }
+      }
+      for (let i = 0; i < dealerDownHiddenCards.length; i++) {
+        if (dealerDownHiddenCards[i].value === playPile[playPile.length - 1].value) {
+          cardToPlay = dealerDownHiddenCards[i]
+          return cardToPlay
+        }
+      }
+      for (let i = 0; i < dealerDownHiddenCards.length; i++) {
+        if (dealerDownHiddenCards[i].value > playPile[playPile.length - 1].value && dealerDownHiddenCards[i].value != 3 && dealerDownHiddenCards[i].value != 10) {
+          cardToPlay = dealerDownHiddenCards[i]
+          return cardToPlay
+        }
+      }
+      for (let i = 0; i < dealerDownHiddenCards.length; i++) {
+        if (dealerDownHiddenCards[i].value === 2 || dealerDownHiddenCards[i].value === 3 || dealerDownHiddenCards[i].value === 10) {
+          cardToPlay = dealerDownHiddenCards[i]
+          return cardToPlay
+        }
+      }
+      return cardToPlay
     }
+    //play down shown cards
     if (dealerCards.length === 0 && dealerDownShownCards.length > 0) {
-      //play down shown cards
+      if (playPile.length === 0) {
+        for (let i = 0; i < dealerDownShownCards.length; i++) {
+          if (dealerDownShownCards[i].value != 2 && dealerDownShownCards[i].value != 3 && dealerDownShownCards[i].value != 10) {
+            cardToPlay = dealerDownShownCards[i]
+            return cardToPlay
+          }
+        }
+        for (let i = 0; i < dealerDownShownCards.length; i++) {
+          if (dealerDownShownCards[i].value = 2) {
+            cardToPlay = dealerDownShownCards[i]
+            return cardToPlay
+          }
+        }
+        for (let i = 0; i < dealerDownShownCards.length; i++) {
+          if (dealerDownShownCards[i].value = 10) {
+            cardToPlay = dealerDownShownCards[i]
+            return cardToPlay
+          }
+        }
+        for (let i = 0; i < dealerDownShownCards.length; i++) {
+          if (dealerDownShownCards[i].value = 3) {
+            cardToPlay = dealerDownShownCards[i]
+            return cardToPlay
+          }
+        }
+        return cardToPlay
+      }
+      if (playPile[playPile.length - 1].value === 7) {
+        for (let i = 0; i < dealerDownShownCards.length; i++) {
+          if (dealerDownShownCards[i].value <= 7 && dealerDownShownCards[i].value > 3) {
+            cardToPlay = dealerDownShownCards[i]
+            return cardToPlay
+          } else if (dealerDownShownCards[i].value === 2) {
+            cardToPlay = dealerDownShownCards[i]
+            return cardToPlay
+          } else if (dealerDownShownCards[i].value === 10) {
+            cardToPlay = dealerDownShownCards[i]
+            return cardToPlay
+          } else if (dealerDownShownCards[i].value === 3) {
+            cardToPlay = dealerDownShownCards[i]
+            return cardToPlay
+          }
+        }
+      }
+      for (let i = 0; i < dealerDownShownCards.length; i++) {
+        if (dealerDownShownCards[i].value === playPile[playPile.length - 1].value) {
+          cardToPlay = dealerDownShownCards[i]
+          return cardToPlay
+        }
+      }
+      for (let i = 0; i < dealerDownShownCards.length; i++) {
+        if (dealerDownShownCards[i].value > playPile[playPile.length - 1].value && dealerDownShownCards[i].value != 3 && dealerDownShownCards[i].value != 10) {
+          cardToPlay = dealerDownShownCards[i]
+          return cardToPlay
+        }
+      }
+      for (let i = 0; i < dealerDownShownCards.length; i++) {
+        if (dealerDownShownCards[i].value === 2 || dealerDownShownCards[i].value === 3 || dealerDownShownCards[i].value === 10) {
+          cardToPlay = dealerDownShownCards[i]
+          return cardToPlay
+        }
+      }
+      return cardToPlay
     }
+    //play cards in hand
     if (playPile.length === 0) {
       // loop over to find the best card to play??
       for (let i = 0; i < dealerCards.length; i++) {
@@ -724,12 +852,19 @@ function App() {
     }
     if (playPile[playPile.length - 1].value === 7) {
       for (let i = 0; i < dealerCards.length; i++) {
-        if (dealerCards[i].value <= 7) {
+        if (dealerCards[i].value <= 7 && dealerCards[i].value > 3) {
           cardToPlay = dealerCards[i]
           return cardToPlay
-        } 
-        // BUG HERE??????
-        else dealerPickUp()
+        } else if (dealerCards[i].value === 2) {
+          cardToPlay = dealerCards[i]
+          return cardToPlay
+        } else if (dealerCards[i].value === 10) {
+          cardToPlay = dealerCards[i]
+          return cardToPlay
+        } else if (dealerCards[i].value === 3) {
+          cardToPlay = dealerCards[i]
+          return cardToPlay
+        }
       }
     }
     for (let i = 0; i < dealerCards.length; i++) {
@@ -753,85 +888,134 @@ function App() {
     return cardToPlay
   }
 
-  // there's a bug for dealer playing on a 7
   // should be .then on playCard()
   function dealerPlay() {
-    dealerCards.sort((a, b) => a.value - b.value)
-    let cardToPlay = checkDealerCard()
-    // if cardToPlay is defined, play the card, else draw
-    if (cardToPlay) {
-      let updatedHand = dealerCards.filter((dealerCard) => dealerCard.display != cardToPlay.display)
-      if (drawDeck.length > 0) {
-        if (cardToPlay.value === 3) {
-          let player3 = playerCards.filter((card) => card.value === 3);
-          if (player3[0]) {
+        //play cards from hand
+    if (dealerCards.length > 0) {
+      let cardToPlay = checkDealerCard()
+      // if cardToPlay is defined, play the card, else draw
+      if (cardToPlay) {
+        let updatedHand = dealerCards.filter((dealerCard) => dealerCard.display != cardToPlay.display)
+        if (drawDeck.length > 0) {
+          if (cardToPlay.value === 3) {
+            let player3 = playerCards.filter((card) => card.value === 3);
+            if (player3[0]) {
+              return (
+                handleShow3(),
+                setDiscardPile([...discardPile, cardToPlay]),
+                setDealerCards([...updatedHand, getNextCard('dealerHand')]),
+                endOfTurn()
+              )
+            } else {
+              if (updatedHand.length < 3) {
+                return (
+                  playerCards.push.apply(playerCards, playPile),
+                  setPlayerCards(playerCards),
+                  setPlayPile([]),
+                  setDiscardPile([...discardPile, cardToPlay]),
+                  setDealerCards([...updatedHand, getNextCard('dealerHand')]),
+                  alert('you got threed, your go'),
+                  endOfTurn()
+                )
+              } else return (
+                playerCards.push.apply(playerCards, playPile),
+                setPlayerCards(playerCards),
+                setPlayPile([]),
+                setDealerCards(updatedHand),
+                alert('you got threed, your go'),
+                endOfTurn()
+              )
+            }
+          }
+          if (cardToPlay.value === 10) {
+            if (updatedHand.length < 3) {
+              return (
+                discardPile.push.apply(discardPile, playPile),
+                setDiscardPile(discardPile),
+                setPlayPile([]),
+                setDealerCards([...updatedHand, getNextCard('dealerHand')]),
+                endOfTurn(),
+                alert('dealer played 10, hit dealer play again')
+              )
+            } else return (
+              discardPile.push.apply(discardPile, playPile),
+              setDiscardPile(discardPile),
+              setPlayPile([]),
+              setDealerCards(updatedHand),
+              endOfTurn(),
+              alert('dealer played 10, hit dealer play again')
+            )
+          }
+          if (updatedHand.length < 3) {
             return (
-              handleShow3(),
-              setDiscardPile([...discardPile, cardToPlay]),
+              setPlayPile([...playPile, cardToPlay]),
               setDealerCards([...updatedHand, getNextCard('dealerHand')]),
+              checkForFour(cardToPlay),
               endOfTurn()
             )
-          } else {
-            if (updatedHand.length < 3) {
+          } else return (
+            setPlayPile([...playPile, cardToPlay]),
+            setDealerCards(updatedHand),
+            checkForFour(cardToPlay),
+            endOfTurn()
+          )
+        } else if (drawDeck.length === 0) {
+          if (cardToPlay.value === 3) {
+            let player3 = playerCards.filter((card) => card.value === 3);
+            if (player3[0]) {
+              return (
+                handleShow3(),
+                setDiscardPile([...discardPile, cardToPlay]),
+                setDealerCards(updatedHand),
+                alert('you got threed, your go'),
+                endOfTurn()
+              )
+            } else {
               return (
                 playerCards.push.apply(playerCards, playPile),
                 setPlayerCards(playerCards),
                 setPlayPile([]),
                 setDiscardPile([...discardPile, cardToPlay]),
-                setDealerCards([...updatedHand, getNextCard('dealerHand')]),
+                setDealerCards(updatedHand),
                 alert('you got threed, your go'),
                 endOfTurn()
               )
-            } else return (
-              playerCards.push.apply(playerCards, playPile),
-              setPlayerCards(playerCards),
-              setPlayPile([]),
-              setDealerCards(updatedHand),
-              alert('you got threed, your go'),
-              endOfTurn()
-            )
-          }
-        }
-        if (cardToPlay.value === 10) {
-          if (updatedHand.length < 3) {
+            }
+          } else if (cardToPlay.value === 10) {
             return (
               discardPile.push.apply(discardPile, playPile),
-              setDiscardPile(discardPile),
+              setDiscardPile([...discardPile, cardToPlay]),
               setPlayPile([]),
-              setDealerCards([...updatedHand, getNextCard('dealerHand')]),
-              endOfTurn(),
-              alert('dealer played 10, hit dealer play again')
+              setDealerCards(updatedHand),
+              alert('dealer played 10, hit dealer play again'),
+              endOfTurn()
             )
           } else return (
-            discardPile.push.apply(discardPile, playPile),
-            setDiscardPile(discardPile),
-            setPlayPile([]),
-            setDealerCards(updatedHand),
-            endOfTurn(),
-            alert('dealer played 10, hit dealer play again')
-          )
-        }
-        if (updatedHand.length < 3) {
-          return (
             setPlayPile([...playPile, cardToPlay]),
-            setDealerCards([...updatedHand, getNextCard('dealerHand')]),
+            setDealerCards(updatedHand),
             checkForFour(cardToPlay),
             endOfTurn()
           )
-        } else return (
-          setPlayPile([...playPile, cardToPlay]),
-          setDealerCards(updatedHand),
-          checkForFour(cardToPlay),
-          endOfTurn()
-        )
-      } else if (drawDeck.length === 0) {
+        }
+      } else dealerCards.push.apply(dealerCards, playPile)
+      setDealerCards(dealerCards)
+      setPlayPile([])
+      alert('dealer had to pick up, your go')
+      endOfTurn()
+    }
+    //play down shown cards
+    if (dealerCards.length === 0 && dealerDownShownCards.length > 0) {
+      let cardToPlay = checkDealerCard()
+      // if cardToPlay is defined, play the card, else draw
+      if (cardToPlay) {
+        let updatedHand = dealerDownShownCards.filter((dealerCard) => dealerCard.display != cardToPlay.display)
         if (cardToPlay.value === 3) {
           let player3 = playerCards.filter((card) => card.value === 3);
           if (player3[0]) {
             return (
               handleShow3(),
               setDiscardPile([...discardPile, cardToPlay]),
-              setDealerCards(updatedHand),
+              setDealerDownShownCards(updatedHand),
               alert('you got threed, your go'),
               endOfTurn()
             )
@@ -841,36 +1025,83 @@ function App() {
               setPlayerCards(playerCards),
               setPlayPile([]),
               setDiscardPile([...discardPile, cardToPlay]),
-              setDealerCards(updatedHand),
+              setDealerDownShownCards(updatedHand),
               alert('you got threed, your go'),
               endOfTurn()
             )
           }
-        }
-        if (cardToPlay.value === 10) {
+        } else if (cardToPlay.value === 10) {
           return (
             discardPile.push.apply(discardPile, playPile),
             setDiscardPile(discardPile),
             setPlayPile([]),
-            setDealerCards(updatedHand),
+            setDealerDownShownCards(updatedHand),
             endOfTurn(),
             alert('dealer played 10, hit dealer play again')
           )
-        }
-        if (updatedHand.length < 3) {
+        } else return (
+          setPlayPile([...playPile, cardToPlay]),
+          setDealerDownShownCards(updatedHand),
+          checkForFour(cardToPlay),
+          endOfTurn()
+        )
+      } else dealerCards.push.apply(dealerCards, playPile)
+      setDealerCards(dealerCards)
+      setPlayPile([])
+      alert('dealer had to pick up, your go')
+      // THIS IS WONKY, DEALER DOESNT PLAY ANYTHING AND JUST KNOWS THAT AND PICKS UP...
+      endOfTurn()
+    }
+    //play down hidden cards
+    if (dealerCards.length === 0 && dealerDownShownCards.length === 0) {
+      let cardToPlay = checkDealerCard()
+      // if cardToPlay is defined, play the card, else draw
+      if (cardToPlay) {
+        let updatedHand = dealerDownHiddenCards.filter((dealerCard) => dealerCard.display != cardToPlay.display)
+        if (cardToPlay.value === 3) {
+          let player3 = playerCards.filter((card) => card.value === 3);
+          if (player3[0]) {
+            return (
+              handleShow3(),
+              setDiscardPile([...discardPile, cardToPlay]),
+              setDealerDownHiddenCards(updatedHand),
+              alert('you got threed, your go'),
+              endOfTurn()
+            )
+          } else {
+            return (
+              playerCards.push.apply(playerCards, playPile),
+              setPlayerCards(playerCards),
+              setPlayPile([]),
+              setDiscardPile([...discardPile, cardToPlay]),
+              setDealerDownHiddenCards(updatedHand),
+              alert('you got threed, your go'),
+              endOfTurn()
+            )
+          }
+        } else if (cardToPlay.value === 10) {
           return (
-            setPlayPile([...playPile, cardToPlay]),
-            setDealerCards(updatedHand),
-            checkForFour(cardToPlay),
-            endOfTurn()
+            discardPile.push.apply(discardPile, playPile),
+            setDiscardPile(discardPile),
+            setPlayPile([]),
+            setDealerDownHiddenCards(updatedHand),
+            endOfTurn(),
+            alert('dealer played 10, hit dealer play again')
           )
-        }
-      }
-    } else dealerCards.push.apply(dealerCards, playPile)
-    setDealerCards(dealerCards)
-    setPlayPile([])
-    alert('dealer had to pick up, your go')
-    endOfTurn()
+        } else return (
+          setPlayPile([...playPile, cardToPlay]),
+          setDealerDownHiddenCards(updatedHand),
+          checkForFour(cardToPlay),
+          endOfTurn()
+        )
+      } else dealerCards.push.apply(dealerCards, playPile)
+      setDealerCards(dealerCards)
+      setPlayPile([])
+      alert('dealer had to pick up, your go')
+      // THIS IS WONKY, DEALER DOESNT PLAY ANYTHING AND JUST KNOWS THAT AND PICKS UP...
+      endOfTurn()
+    }
+
   }
 
   // should have dealer play next automatically?
@@ -1039,7 +1270,7 @@ function App() {
 
   // automotically play multiple of same card from hand??
   // end game logic - 
-  //   function to increment turn and check if someone has won 
+  //   have cdealer play like a human when you're down to your face down cards...... 
 
   // have computer be able to 3 me back
   // alert for computer 3ing me
@@ -1048,6 +1279,12 @@ function App() {
   // increments turn
   // checks to see if 4 in a row in play pile
   // checks to see if someone won
+
+  // at begining show who has lowest starting card
+
+  // dealer needs to be able to play multiples of the same card.......
+
+  // add about/rules
 
   return (
     <div>
@@ -1065,16 +1302,16 @@ function App() {
         {drawDeck.length}
       </div>
       <div><h4>Discard and Play Pile:</h4>
-      {/* discard pile: {discardPile.length} */}
+        {/* discard pile: {discardPile.length} */}
         {discardPile && discardPile.map((card) => (
           <img key={card.display} style={{ height: 45, width: 30, padding: 1 }} src={card.back_img} />
         ))}
         {discardPile.length}
         <br />
         {playPile && playPile.map((card) => (
-          <img key={card.display} style={{ height: 80, width: 4}} src={card.front_img} />
+          <img key={card.display} style={{ height: 80, width: 4 }} src={card.front_img} />
         ))}
-        {playPile[playPile.length - 1] && 
+        {playPile[playPile.length - 1] &&
           <img key={playPile[playPile.length - 1].display} style={{ height: 90, width: 60, padding: 5 }} src={playPile[playPile.length - 1].front_img} />
         }
       </div>

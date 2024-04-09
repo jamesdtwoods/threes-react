@@ -501,6 +501,9 @@ function App() {
   const [show3, setShow3] = useState(false);
   const handleClose3 = () => setShow3(false);
   const handleShow3 = () => setShow3(true);
+  const [showRules, setShowRules] = useState(false);
+  const handleCloseRules = () => setShowRules(false);
+  const handleShowRules = () => setShowRules(true);
 
   // shuffleDeck(deckOfCards)
 
@@ -1288,6 +1291,7 @@ function App() {
 
   return (
     <div>
+      <Button variant="light" onClick={handleShowRules}>Rules</Button>
       <Button variant="light" onClick={newGame}>New Game</Button>
       <Button variant="light" onClick={viewDeck}>View Deck</Button>
       {/* <Button variant="light" onClick={dealerSwap}>Dealer Swap</Button> */}
@@ -1396,6 +1400,19 @@ function App() {
         <Modal.Footer>
           <Button variant="light" onClick={handleClose3}>
             No?
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal show={showRules} onHide={handleCloseRules} animation={false}>
+        <Modal.Header closeButton>
+          <Modal.Title></Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Here are the rules!
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="light" onClick={handleCloseRules}>
+            Close
           </Button>
         </Modal.Footer>
       </Modal>
